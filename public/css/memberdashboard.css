@@ -1,0 +1,138 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Morpheus', serif; /* Use a WoW-like font */
+    background: #0c0c0c; /* Dark background */
+    color: #e2d8b7; /* Light beige text for readability */
+    background: url('/images/draineibackground1.png') no-repeat center center fixed;
+}
+
+.profile-container {
+    display: grid;
+    grid-template-areas:
+        "feed menu menu"
+        "feed user character";
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: fit-content;
+    margin: 0 auto;
+}
+
+.profile-feed {
+    opacity: 85%;
+    grid-area: feed;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a); /* Subtle gradient */
+    padding: 20px;
+    border: 2px solid #a67c00; /* Gold border */
+    border-radius: 10px;
+    box-shadow: 0 0 15px #a67c00; /* Gold glow */
+    height: 80vh;
+}
+
+.profile-menu {
+    grid-area: menu;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    padding: 20px;
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px #a67c00;
+}
+
+.profile-menu nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.profile-menu nav ul li a {
+    text-decoration: none;
+    color: #ffd700; /* Bright gold for links */
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.profile-menu nav ul li a:hover {
+    color: #e2d8b7; /* Light beige on hover */
+}
+
+.profile-user {
+    grid-area: user;
+    padding: 20px;
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #a67c00;
+    text-align: center;
+}
+
+.profile-user::before {
+    position: absolute;
+    opacity: 85%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    content: "";
+    z-index: -1;
+}
+
+.profile-character {
+    grid-area: character;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    padding: 20px;
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #a67c00;
+}
+
+h2 {
+    color: #ffd700; /* Bright gold for headings */
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 5px;
+}
+
+ul li a {
+    color: #e2d8b7; /* Light beige for links */
+    text-decoration: none;
+}
+
+ul li a:hover {
+    color: #ffd700; /* Bright gold on hover */
+}
+
+.character-occurence {
+    display: flex;
+    max-width: 100%;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a); /* Subtle gradient */
+    border: 2px solid #a67c00; /* Gold border */    
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #a67c00; /* Gold line between occurrences */
+}
+
+.character-icon-left {
+    max-width: 35%;
+    width: fit-content;
+    height: auto;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.character-icon-left img {
+    display: block;
+    width: 100%
+}

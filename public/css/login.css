@@ -1,0 +1,100 @@
+body {
+    display: flex; /* Enable Flexbox */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 100vh; /* Ensure the body takes up the full viewport height */
+    margin: 0; /* Remove default margin */
+    background: url('/images/wowloginbackground2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Morpheus', serif; /* Use a WoW-like font */
+    color: #f8e6d8;
+}
+
+.wow-login-container {
+    max-width: 400px;
+    width: 100%; /* Ensure it scales properly on smaller screens */
+    margin: 0; /* Remove default margin */
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #d4af37;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #d4af37;
+    text-align: center;
+    overflow: hidden; /* Ensure no child elements overflow */
+}
+
+.wow-login-header h1 {
+    font-size: 2rem;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.wow-login-header p {
+    font-size: 1rem;
+    color: #f8e6d8;
+}
+
+.wow-form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.wow-form-group label {
+    display: block;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.wow-input {
+    width: 100%; /* Ensure inputs take up the full width of the parent */
+    max-width: 100%; /* Prevent inputs from exceeding the parent width */
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #d4af37;
+    border-radius: 5px;
+    background: #1a1a1a;
+    color: #f8e6d8;
+    box-sizing: border-box; /* Include padding and border in the element's width */
+}
+
+.wow-input:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 5px #ffd700;
+}
+.wow-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.wow-btn-primary {
+    background: #d4af37;
+    color: #1a1a1a;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.wow-btn-primary:hover {
+    background: #ffd700;
+}
+
+.wow-alert-danger {
+    background: #8b0000;
+    color: #f8e6d8;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.wow-logged-in {
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    color: #ffd700;
+}
+
+.wow-form-actions {
+    margin-top: 20px;
+}

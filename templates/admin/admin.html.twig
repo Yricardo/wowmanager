@@ -1,0 +1,11 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block main %}
+
+	<h1>{{ ea.dashboardTitle }}</h1>
+
+	{% for menuItem in ea.mainMenu.items %}
+		{{ menuItem.title }}
+	{% endfor %}
+
+{% endblock main %}

@@ -22,6 +22,7 @@ class UserFixtures extends Fixture
         $admin = new User();
         $admin->setUsername('admin');
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin'));
+        $admin->setTrustScore(100);
         $admin->setCreatedAt(new \DateTimeImmutable());
         $admin->setRoles(['ROLE_ADMIN']);
 
@@ -34,6 +35,7 @@ class UserFixtures extends Fixture
             $user->setPassword($this->passwordHasher->hashPassword($user, 'f_user' . $i));
             $user->setRoles(['ROLE_USER', 'ROLE_CONTRIBUTOR']);
             $user->setCreatedAt(new \DateTimeImmutable());
+            $user->setTrustScore(rand(50,100));
             $manager->persist($user);
             $this->addReference('f_user' . $i, $user);
         }
@@ -45,6 +47,7 @@ class UserFixtures extends Fixture
             $user->setPassword($this->passwordHasher->hashPassword($user, 's_user' . $i));
             $user->setRoles(['ROLE_USER']);
             $user->setCreatedAt(new \DateTimeImmutable());
+            $user->setTrustScore(rand(50,100));
             $manager->persist($user);
             $this->addReference('s_user' . $i, $user);
         }

@@ -9,6 +9,7 @@ Before starting, ensure you have the following installed:
 1. **PHP**: Version 8.1 or higher.  
 2. **Composer**: Dependency manager for PHP.  
 3. **Relational Database**: MySQL or PostgreSQL (ensure the database server is running).  
+4. **Symfony CLI**
 
 ## Setup Instructions
 
@@ -48,7 +49,7 @@ Before starting, ensure you have the following installed:
 
 Start the Symfony development server:  
 ```bash
-symfony serve
+symfony server:start
 ```
 
 Access the application in your browser at `http://127.0.0.1:8000`.

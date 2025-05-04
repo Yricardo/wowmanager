@@ -62,12 +62,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $notifications;
 
+    #[ORM\Column]
+    private ?int $trustScore = null;
+
+    /**
+     * @var Collection<int, EventLog>
+     */
+    #[ORM\ManyToMany(targetEntity: EventLog::class, mappedBy: 'watchers')]
+    private Collection $eventLogs;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->eventLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -270,6 +280,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($notification->getUser() === $this) {
                 $notification->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getTrustScore(): ?int
+    {
+        return $this->trustScore;
+    }
+
+    public function setTrustScore(int $trustScore): static
+    {
+        $this->trustScore = $trustScore;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EventLog>
+     */
+    public function getEventLogs(): Collection
+    {
+        return $this->eventLogs;
+    }
+
+    public function addEventLog(EventLog $eventLog): static
+    {
+        if (!$this->eventLogs->contains($eventLog)) {
+            $this->eventLogs->add($eventLog);
+            $eventLog->addWatcher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventLog(EventLog $eventLog): static
+    {
+        if ($this->eventLogs->removeElement($eventLog)) {
+            $eventLog->removeWatcher($this);
         }
 
         return $this;

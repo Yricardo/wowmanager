@@ -47,27 +47,8 @@ class CharacterFixtures extends Fixture implements DependentFixtureInterface
 		for($i = 1; $i <= 20; $i++)
 		{
 			$user = $this->getReference('s_user' . $i, User::class);
-			$char = new Character();
-			$char->setUser($user);
-			$char->setName(uniqid());
-			if(rand(0,1) == 1)
-			{
-				$wowVersion = $this->getReference(WowVersion::WOW_VERSION_CLASSIC, WowVersion::class);
-				$maxLevel = 85;
-				$char->setServer($this->getReference(WowVersion::WOW_VERSION_CLASSIC, Server::class));
-			}
-			else
-			{
-				$wowVersion = $this->getReference(WowVersion::WOW_VERSION_RETAIL, WowVersion::class);
-				$maxLevel = 50;
-				$char->setServer($this->getReference(WowVersion::WOW_VERSION_RETAIL, Server::class));
-			}
-			$char->setLevel($maxLevel);
-			$char->setGearLevel(round(350 * ($char->getLevel() / $maxLevel)));
-			$class = $this->getReference('class_' . $classesNames[array_rand($classesNames)], CharacterClass::class);
-			$char->setCharacterClass($class);
+			$char = $this->generateCharacter('scharacter_'.$i, $user);
 			$manager->persist($char);
-			$this->addReference('scharacter_'.$i, $char);
 		}
 
 		$manager->flush();

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User admin Profile{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/memberdashboard.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/member.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="profile-container">
+        <!-- Left Block: Activity Feed -->
+        <div class="profile-feed">
+            <h2>Activity Feed</h2>
+
+            <div class="feed-switch">
+                <button class="feed-button" role="button">Guild</button>
+                <button class="feed-button" role="button">Friends</button>
+                <button class="feed-button" role="button">Auctions</button>
+                <button class="feed-button" role="button">All</button>
+            </div>
+
+            <p> todo put buttons to switch feed (guild, friends, upcoming events...)
+            <ul>
+                <li>Guild Event: Raid scheduled for Friday</li>
+                <li>Friend Achievement: JohnDoe reached level 70</li>
+                <li>Guild Update: New member joined</li>
+            </ul>
+            <button class="button-6" role="button" id="hide-feed">Hide</button>
+        </div>
+
+        <!-- Center Upper Block: Navigation Menu -->
+        <div class="profile-menu">
+            <nav>
+                <ul class="menu-items">
+                    <li><a href="#"><span class="menu-icon">🏠</span> </a></li>
+                    <li><a href="#"><span class="menu-icon">👥</span><span class="notification-badge">3</span></a></li>
+                    <li><a href="#"><span class="menu-icon">🏰</span><span class="notification-badge">3</span></a></li>
+                    <li><a href="#"><span class="menu-icon">⚖️</span><span class="notification-badge">3</span></a></li>
+                    <li><a href="#"><span class="menu-icon">📅</span><span class="notification-badge">3</span></a></li>
+                    <li><a href="#"><span class="menu-icon">🎰</span></a></li>
+                    <li><a href="#"><span class="menu-icon">✉️</span></a></li>
+                    <li><a href="#"><span class="menu-icon">⚙️</span></a></li>
+                    <li><a href="{{ path('app_logout') }}"><span class="menu-icon">🚪</span></a></li>
+                </ul>
+            </nav>
+        </div>
+
+        {% block template %}
+        {% endblock %}
+
+        <span id="show-feed"><btn class="button-6" id="show-feed-btn">Show feed</button></span>
+{% endblock %}

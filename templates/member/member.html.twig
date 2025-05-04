@@ -1,81 +1,131 @@
-{% extends 'base.html.twig' %}
+{% extends 'member/member_base.html.twig' %}
 
-{% block title %}User admin Profile{% endblock %}
-
-{% block stylesheets %}
+{% block javascripts %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/memberdashboard.css') }}">
+    <script src="{{ asset('js/template-grid-layout/member_grid_custom_overview.js') }}"></script>
 {% endblock %}
 
-{% block body %}
-    <div class="profile-container">
-        <!-- Left Block: Activity Feed -->
-        <div class="profile-feed">
-            <h2>Activity Feed</h2>
-            <p> todo put buttons to switch feed (guild, friends, all...)
-            <ul>
-                <li>Guild Event: Raid scheduled for Friday</li>
-                <li>Friend Achievement: JohnDoe reached level 70</li>
-                <li>Guild Update: New member joined</li>
-            </ul>
-        </div>
-
-        <!-- Center Upper Block: Navigation Menu -->
-        <div class="profile-menu">
-            <nav>
-                <ul>
-                    <li><a href="#">Overview</a></li>
-                    <li><a href="#">Social (x)</a></li>
-                    <li><a href="#">Guild (x)</a></li>
-                    <li><a href="#">Black AH</a></li>
-                    <li><a href="#">Events</a></li>
-                    <li><a href="#">Settings</a></li>
-                    <li><a href="{{path('app_logout')}}">LOGOUT</a></li>
-                </ul>
-            </nav>
-        </div>
-
-        <!-- Center Lower Block: User Profile -->
-        <div class="profile-user">
+{% block template %}
+    {% embed 'member/member_base_layouts/member_base_overview_grid.html.twig' %}
+        {% block midle %}
             <h2>{{ app.user.username }}</h2>
             <p>Global Metrics:</p>
-            <ul>
-                <li>Trust score : TODO IMPLEMENT</li>
-                <li>Current selling value: TODO EXTRACT INFORMATION ON CONTROLLER AND PUT ON FCKING DATA MODEL</li>
-                <li>Nb of guilds joined: TODO EXTRACT WITH FILTER FROM DATA MODEL FIND HOW</li>
-            </ul>
+            <div class="metrics-container">
+                <div class="metric-card">
+                    <span class="metric-icon">⚖️</span>
+                    <div class="metric-details">
+                        <strong>Trust Score:</strong>
+                        <p>TODO IMPLEMENT</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">💰</span>
+                    <div class="metric-details">
+                        <strong>Awaiting Gold Amount:</strong>
+                        <p>TODO IMPLEMENT</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">📈</span>
+                    <div class="metric-details">
+                        <strong>Current Selling Value:</strong>
+                        <p>TODO EXTRACT INFORMATION ON CONTROLLER</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">🏰</span>
+                    <div class="metric-details">
+                        <strong>Number of Guilds Joined:</strong>
+                        <p>TODO EXTRACT WITH FILTER FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">🤝</span>
+                    <div class="metric-details">
+                        <strong>Number of Friends:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">📅</span>
+                    <div class="metric-details">
+                        <strong>Events to Come:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">⏳</span>
+                    <div class="metric-details">
+                        <strong>Past Events:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">📦</span>
+                    <div class="metric-details">
+                        <strong>Ongoing Auctions:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">🛒</span>
+                    <div class="metric-details">
+                        <strong>Items Sold:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">🛍️</span>
+                    <div class="metric-details">
+                        <strong>Items Bought:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">📋</span>
+                    <div class="metric-details">
+                        <strong>Items Listed:</strong>
+                        <p>FROM DATA MODEL</p>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
 
-            <p>Account creation date: {{ app.user.createdAt|date('Y-md H:i:s') }}</p>
-        </div>
-
-        <!-- Right Block: Character Details -->
-        <div class="profile-character">
+        {% block right %}
             <h2>Characters</h2>
             {% if app.user.characters|length > 0 %}
+                <div class="character-list">
                     {% for character in app.user.characters %}
-                        <div class="character-occurence">
-                            <div class="character-icon-left">
-                                <img src="{% if character.characterClass.classImgPath is not null %} {{ asset(character.characterClass.classImgPath) }} {% else %} {{ asset('images/undefinedcharacterimg.jpg') }} {% endif %}" alt="{{ character.name }}">
+                        <div class="character-card">
+                            <div class="character-icon">
+                                <img src="{% if character.characterClass.classImgPath is not null %} 
+                                    {{ asset(character.characterClass.classImgPath) }} 
+                                    {% else %} 
+                                    {{ asset('images/undefinedcharacterimg.jpg') }} 
+                                    {% endif %}" 
+                                    alt="{{ character.name }}">
                             </div>
-                                <div class="character-summary-right">
-                                <strong>Shared items link</strong><br>
-                                <strong>ICON EVENTS LINK:</strong><br>
-                                <strong>ICON BANK LINK:</strong><br>
-                                <strong>ICON GUILD LINK</strong><br>
+                            <div class="character-details">
+                                <h3>{{ character.name }}</h3>
+                                <p><strong>Class:</strong> {{ character.characterClass.name }}</p>
+                                <p><strong>Level:</strong> {{ character.level }}</p>
+                                <p><strong>Gear Level:</strong> {{ character.gearLevel | default("noob") }}</p>
+                                <p><strong>Guild:</strong> {{ character.guild.name | default("no guild") }}</p>
                             </div>
-                            <div class="character-summary-right">
-                                <strong>Name:</strong> {{ character.name }}<br>
-                                <strong>Class:</strong> {{ character.characterClass.name }} <br>
-                                <strong>Level:</strong> {{ character.level }}<br>
-                                <strong>Gear Level:</strong> {{ character.gearLevel | default("noob") }}<br>
-                                <strong>Guild:</strong> {{character.guild.name | default("no guild") }} <br>
+                            <div class="character-links">
+                                <a href="#" class="character-link">Shared Items</a>
+                                <a href="#" class="character-link">Events</a>
+                                <a href="#" class="character-link">Bank</a>
+                                <a href="#" class="character-link">Guild</a>
                             </div>
-                        </div>    
-                        <hr>
+                        </div>
                     {% endfor %}
+                </div>
             {% else %}
                 <p>No characters found for this user.</p>
             {% endif %}
-        </div>
-    </div>
+            <br>
+            <button class="button-6" role="button">Add</button>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}

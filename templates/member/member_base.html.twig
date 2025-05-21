@@ -16,7 +16,7 @@
     <div class="profile-container">
         <!-- Left Block: Activity Feed -->
         <div class="profile-feed">
-            <h2>Activity Feed</h2>
+            <h2>Activity Feed</h2> 
 
             <div class="feed-switch">
                 <button class="feed-button" role="button">Guild</button>
@@ -25,23 +25,45 @@
                 <button class="feed-button" role="button">All</button>
             </div>
 
-            <p> todo put buttons to switch feed (guild, friends, upcoming events...)
-            <ul>
-                <li>Guild Event: Raid scheduled for Friday</li>
-                <li>Friend Achievement: JohnDoe reached level 70</li>
-                <li>Guild Update: New member joined</li>
+            <ul class="feed-items">
+                <li class="feed-card">
+                    <div class="feed-icon">🏰</div>
+                    <div class="feed-details">
+                        <h3>Guild Event</h3>
+                        <p><strong>Description:</strong> Raid scheduled for Friday</p>
+                        <p><strong>Attendees:</strong> 12</p>
+                    </div>
+                    <button class="feed-clear-button" title="Remove Feed Item">❌</button>                    
+                </li>
+                <li class="feed-card">
+                    <div class="feed-icon">👥</div>
+                    <div class="feed-details">
+                        <h3>Friend Activity</h3>
+                        <p><strong>Description:</strong> JohnDoe reached level 70</p>
+                        <p><strong>Time:</strong> 2 hours ago</p>
+                    </div>
+                    <button class="feed-clear-button" title="Remove Feed Item">❌</button>
+                </li>
+                <li class="feed-card">
+                    <div class="feed-icon">⚖️</div>
+                    <div class="feed-details">
+                        <h3>Auction Update</h3>
+                        <p><strong>Description:</strong> Your item was sold for 500 gold</p>
+                        <p><strong>Buyer:</strong> Player123</p>
+                    </div>
+                    <button class="feed-clear-button" title="Remove Feed Item">❌</button>
+                </li>
             </ul>
-            <button class="button-6" role="button" id="hide-feed">Hide</button>
         </div>
 
         <!-- Center Upper Block: Navigation Menu -->
         <div class="profile-menu">
             <nav>
                 <ul class="menu-items">
-                    <li><a href="#"><span class="menu-icon">🏠</span> </a></li>
+                    <li><a href="{{ path('app_member')}}"><span class="menu-icon">🏠</span> </a></li>
                     <li><a href="#"><span class="menu-icon">👥</span><span class="notification-badge">3</span></a></li>
                     <li><a href="#"><span class="menu-icon">🏰</span><span class="notification-badge">3</span></a></li>
-                    <li><a href="#"><span class="menu-icon">⚖️</span><span class="notification-badge">3</span></a></li>
+                    <li><a href="{{ path('app_auction_list')}}"><span class="menu-icon">⚖️</span><span class="notification-badge">3</span></a></li>
                     <li><a href="#"><span class="menu-icon">📅</span><span class="notification-badge">3</span></a></li>
                     <li><a href="#"><span class="menu-icon">🎰</span></a></li>
                     <li><a href="#"><span class="menu-icon">✉️</span></a></li>
@@ -54,5 +76,14 @@
         {% block template %}
         {% endblock %}
 
-        <span id="show-feed"><btn class="button-6" id="show-feed-btn">Show feed</button></span>
+        <button class="feed-icon-button feed-toogle" id="hide-feed" title="Hide Feed" onclick="hideFeed()">
+            <span class="feed-icon">❌</span>
+        </button>        
+
+        <!-- Show Feed Button -->
+        <span id="show-feed" class="feed-toogle">
+            <button class="feed-icon-button" id="show-feed-btn" title="Show Feed" onclick="showFeed()">
+                <span class="feed-icon">📜</span>
+            </button>
+        </span>
 {% endblock %}

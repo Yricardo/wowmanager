@@ -2,11 +2,11 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/template-grid-layout/member_grid_custom_overview.js') }}"></script>
+    <script src="{{ asset('js/template-grid-layout/member_grid_custom_free.js') }}"></script>
 {% endblock %}
 
-{% block template %}
-    {% embed 'member/member_base_layouts/member_base_overview_grid.html.twig' %}
+{% block main %}
+    {% embed 'member/member_base_layouts/member_base_free_grid.html.twig' %}
         {% block midle %}
             <h2>{{ app.user.username }}</h2>
             <p>Global Metrics:</p>

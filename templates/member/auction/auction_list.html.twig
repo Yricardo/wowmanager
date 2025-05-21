@@ -1,0 +1,148 @@
+{% extends 'member/member_base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/template-grid-layout/member_grid_custom_overview.js') }}"></script>
+{% endblock %}
+
+{% block template %}
+    {% embed 'member/member_base_layouts/member_base_overview_grid.html.twig' %}
+        {% block midle %}
+            <!-- here a menu to switch between displaying different auctions, lets call them button 1, 2, 3 first -->
+            <div class="auction-menu" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: center;">
+                <button style="min-width: 50px" class="button-6{% if activeTab is defined and activeTab == 'all' %} active{% endif %}" type="button" style="flex: 1;">
+                    All Auctions
+                </button>
+                <button style="min-width: 50px" class="button-6{% if activeTab is defined and activeTab == 'my' %} active{% endif %}" type="button" style="flex: 1;">
+                    My Auctions
+                </button>
+                <button style="min-width: 50px" class="button-6{% if activeTab is defined and activeTab == 'won' %} active{% endif %}" type="button" style="flex: 1;">
+                    Won Auctions
+                </button>
+            </div>
+            <style>
+            </style>
+            <h2>Ongoing Auctions</h2>
+            <!-- Filter Section -->
+            <div class="auction-filters">
+                <form method="GET" action="{{ path('app_auction_list') }}">
+                    <div class="filter-group">
+                        <label for="item-name">Item Name:</label>
+                        <input type="text" id="item-name" name="itemName" placeholder="Search by item name">
+                    </div>
+                    <div class="filter-group">
+                        <label for="seller-name">Seller:</label>
+                        <input type="text" id="seller-name" name="sellerName" placeholder="Search by seller">
+                    </div>
+                    <div class="filter-group">
+                        <label for="min-price">Min Price:</label>
+                        <input type="number" id="min-price" name="minPrice" placeholder="0" min="0">
+                    </div>
+                    <div class="filter-group">
+                        <label for="max-price">Max Price:</label>
+                        <input type="number" id="max-price" name="maxPrice" placeholder="1000" min="0">
+                    </div>
+                    <div class="filter-group">
+                        <label for="visibility">Visibility:</label>
+                        <select id="visibility" name="visibility">
+                            <option value="">All</option>
+                            <option value="public">Public</option>
+                            <option value="guild">Guild</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="button-6">Filter</button>
+                </form>
+            </div>
+
+            <!-- Auction List -->
+            <div class="auction-list">
+                {% for auction in userAuctions %}
+                    <div class="auction-card">
+                        <div class="auction-item">
+                            <img src="{{ asset(auction.item.imgPath) }}" alt="{{ auction.item.name }}">
+                        </div>
+                        <div class="auction-details">
+                            <h3>{{ auction.item.name }}</h3>
+                            <p><strong>Seller:</strong> {{ auction.seller.name }}</p>
+                            <p><strong>Quantity:</strong> {{ auction.quantity }}</p>
+                            <p><strong>Price:</strong> {{ auction.price.gold }}g {{ auction.price.silver }}s {{ auction.price.bronze }}c</p>
+                            <p><strong>Visibility:</strong> {{ auction.visibility|capitalize }}</p>
+                            <p><strong>Ends In:</strong> {{ auction.durationHour }} hours</p>
+                        </div>
+                        <div class="auction-actions">
+                            <button class="button-6">Bid</button>
+                            <button class="button-6">Buyout</button>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No auctions found.</p>
+                {% endfor %}
+            </div>
+        {% endblock %}
+
+        {% block left %}
+            <h2>Metrics</h2>
+            <div class="metrics">
+                <div class="metric-card">
+                    <span class="metric-icon">🛒</span>
+                    <div class="metric-details">
+                        <strong>Items Sold:</strong>
+                        <p>{{ app.user.itemsSold }}</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">🛍️</span>
+                    <div class="metric-details">
+                        <strong>Items Bought:</strong>
+                        <p>{{ app.user.itemsBought }}</p>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-icon">📋</span>
+                    <div class="metric-details">
+                        <strong>Items Listed:</strong>
+                        <p>{{ app.user.itemsListed }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        {% block right %}
+            <h2>Characters</h2>
+            {% if app.user.characters|length > 0 %}
+                <div class="character-list">
+                    {% for character in app.user.characters %}
+                        <div class="character-card">
+                            <div class="character-icon">
+                                <img src="{% if character.characterClass.classImgPath is not null %} 
+                                    {{ asset(character.characterClass.classImgPath) }} 
+                                    {% else %} 
+                                    {{ asset('images/undefinedcharacterimg.jpg') }} 
+                                    {% endif %}" 
+                                    alt="{{ character.name }}">
+                            </div>
+                            <div class="character-details">
+                                <h3>{{ character.name }}</h3>
+                                <p><strong>Class:</strong> {{ character.characterClass.name }}</p>
+                                <p><strong>Level:</strong> {{ character.level }}</p>
+                                <p><strong>Gear Level:</strong> {{ character.gearLevel | default("noob") }}</p>
+                                <p><strong>Guild:</strong> {{ character.guild.name | default("no guild") }}</p>
+                            </div>
+                            <div class="character-links">
+                                <a href="#" class="character-link">⚖️</a>
+                                <a href="#" class="character-link">📅</a>
+                                <a href="#" class="character-link">💰</a>
+                                <a href="#" class="character-link">❌</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No characters found for this user.</p>
+            {% endif %}
+            <br>
+            <button class="button-6" role="button">Add</button>
+        {% endblock %}
+    {% endembed %}
+{% endblock %}

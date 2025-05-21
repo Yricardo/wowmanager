@@ -71,6 +71,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: EventLog::class, mappedBy: 'watchers')]
     private Collection $eventLogs;
 
+    /**
+     * @var Collection<int, Invitation>
+     */
+    #[ORM\OneToMany(targetEntity: Invitation::class, mappedBy: 'invitedBy', orphanRemoval: true)]
+    private Collection $invitations;
+
     public function __construct()
     {
         $this->characters = new ArrayCollection();
@@ -78,6 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->receivedMessages = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->eventLogs = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -319,6 +326,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->eventLogs->removeElement($eventLog)) {
             $eventLog->removeWatcher($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invitation>
+     */
+    public function getInvitations(): Collection
+    {
+        return $this->invitations;
+    }
+
+    public function addInvitation(Invitation $invitation): static
+    {
+        if (!$this->invitations->contains($invitation)) {
+            $this->invitations->add($invitation);
+            $invitation->setInvitedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvitation(Invitation $invitation): static
+    {
+        if ($this->invitations->removeElement($invitation)) {
+            // set the owning side to null (unless already changed)
+            if ($invitation->getInvitedBy() === $this) {
+                $invitation->setInvitedBy(null);
+            }
         }
 
         return $this;

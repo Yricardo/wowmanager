@@ -7,6 +7,11 @@ function triggerFeedUpdate()
 function showFeed()
 {
     const feedContainer = document.querySelector('.profile-feed');
+
+    const pageState = document.querySelector("#page-state");
+    //if (pageState.dataset.grid == 'overview') {
+        //todo when mutliple grid supported, will have to call approriate initGrid function
+    //}
     initGrid(true);
     if (feedContainer) {
         feedContainer.style.display = 'block';
@@ -18,9 +23,14 @@ function showFeed()
 function hideFeed()
 {
     const feedContainer = document.querySelector('.profile-feed');
+
+    const pageState = document.querySelector("#page-state");
+    //if (pageState.dataset.grid == 'overview') {
+        //todo when mutliple grid supported, will have to call approriate initGrid function
+    //}
     initGrid(false);
     if (feedContainer) {
         feedContainer.style.display = 'none';
         document.getElementById('show-feed').style.display = 'block';
     }
-}
+} 

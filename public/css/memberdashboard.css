@@ -7,7 +7,8 @@ body {
     background: url('/images/draineibackground1.png') no-repeat center center fixed;
     background-size: cover; /* Ensures the image covers the entire viewport */
     height: 100vh; /* Sets the height to the full viewport height */
-    overflow: scroll;
+    max-height: 100vh;
+    overflow: hidden;
 }
 
 .profile-container {
@@ -21,6 +22,7 @@ body {
     padding: 20px;
     max-width: fit-content;
     margin: 0 auto;
+    max-height: 100vh;
 }
 
 .profile-feed {
@@ -42,6 +44,8 @@ body {
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 0 15px #a67c00;
+    height: 10vh;
+    overflow: overlay;
 }
 
 .profile-menu nav ul {
@@ -64,13 +68,14 @@ body {
 }
 
 .profile-user {
-    min-height: 80vh;
+    max-height: 75vh;
     grid-area: user;
     padding: 20px;
     border: 2px solid #a67c00;
     border-radius: 10px;
     box-shadow: 0 0 15px #a67c00;
     text-align: center;
+    overflow: overlay;
 }
 
 .profile-user::before {
@@ -92,6 +97,8 @@ body {
     border: 2px solid #a67c00;
     border-radius: 10px;
     box-shadow: 0 0 15px #a67c00;
+    max-height: 75vh;
+    overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 h2 {
@@ -220,7 +227,15 @@ ul li a:hover {
     left: 10px;
     position: fixed;
     z-index: 1000;
-    background-size: cover; /* Ensure the image covers the entire element */
+    cursor: pointer; /* Add a pointer cursor for better UX */
+}
+
+/* Positioning for the Hide Feed button */
+#hide-feed {
+    bottom: 10px;
+    left: 10px;
+    position: fixed;
+    z-index: 1000;
     cursor: pointer; /* Add a pointer cursor for better UX */
 }
 
@@ -332,6 +347,8 @@ ul li a:hover {
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 0 15px #a67c00;
+    max-height: 10vh;
+    overflow: overlay;
 }
 
 .menu-items {
@@ -412,6 +429,28 @@ ul li a:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
 }
 
+.feed-icon-button {
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a); /* Subtle gradient */
+    color: #ffd700; /* Gold color for icons */
+    font-size: 1.5rem; /* Icon size */
+    border: 2px solid #a67c00; /* Gold border */
+    border-radius: 50%; /* Circular button */
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feed-icon-button:hover {
+    background: linear-gradient(145deg, #ffd700, #e2d8b7); /* Gold gradient on hover */
+    color: #1a1a1a; /* Dark text color on hover */
+    transform: translateY(-3px); /* Lift effect */
+    box-shadow: 0 0 15px #ffd700; /* Glow effect on hover */
+}
+
 .feed-button:hover {
     background: linear-gradient(145deg, #ffd700, #e2d8b7); /* Gold gradient on hover */
     color: #1a1a1a; /* Dark text color on hover */
@@ -422,4 +461,170 @@ ul li a:hover {
 .feed-button:active {
     transform: translateY(1px); /* Slight press effect */
     box-shadow: 0 0 5px #a67c00; /* Reduced shadow on press */
+}
+
+.feed-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Add spacing between feed cards */
+}
+
+.feed-card {
+    position: relative; /* Ensure the clear button is positioned relative to the card */
+    display: flex;
+    align-items: center;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a); /* Subtle gradient */
+    padding: 15px;
+    border: 2px solid #a67c00; /* Gold border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feed-card:hover {
+    transform: translateY(-3px); /* Lift effect on hover */
+    box-shadow: 0 0 15px #ffd700; /* Glow effect on hover */
+}
+
+.feed-icon {
+    font-size: 2rem;
+}
+
+.feed-details h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ffd700; /* Gold for headings */
+}
+
+.feed-details p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #e2d8b7; /* Light beige for text */
+}
+
+/* Feed Clear Button */
+.feed-clear-button {
+    position: absolute;
+    bottom: 10px; /* Position at the bottom of the card */
+    right: 10px; /* Position at the right of the card */
+    background: transparent; /* Transparent background */
+    color: #ff0000; /* Red color for the cross icon */
+    font-size: 1.2rem; /* Icon size */
+    border: none; /* Remove default button border */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.feed-clear-button:hover {
+    color: #ffd700; /* Change to gold on hover */
+    transform: scale(1.2); /* Slightly enlarge the icon on hover */
+}
+
+/* Auction Filters */
+.auction-filters {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #a67c00;
+}
+
+.filter-group {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    font-size: 1rem;
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 8px;
+    border: 1px solid #a67c00;
+    border-radius: 5px;
+    background: #2a2a2a;
+    color: #e2d8b7;
+}
+
+.filter-group input::placeholder {
+    color: #a67c00;
+}
+
+.filter-group select {
+    cursor: pointer;
+}
+
+/* Auction List */
+.auction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auction-card {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    padding: 15px;
+    border: 2px solid #a67c00;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auction-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px #ffd700;
+}
+
+.auction-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    border: 2px solid #ffd700;
+    margin-right: 15px;
+}
+
+.auction-details h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ffd700;
+}
+
+.auction-details p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #e2d8b7;
+}
+
+.auction-actions {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auction-actions .button-6 {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.auction-menu .button-6.active,
+
+.auction-menu .button-6:focus {
+    background: #2d3748;
+    color: #fff;
+    border: 2px solid #4fd1c5;
+}
+
+.auction-menu .button-6 {
+    transition: background 0.2s, color 0.2s, border 0.2s;
 }

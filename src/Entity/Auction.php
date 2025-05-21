@@ -11,6 +11,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: AuctionRepository::class)]
 class Auction
 {
+    public const VISIBILITY_PUBLIC = 'public';
+    public const VISIBILITY_GUILD = 'guild';
+    public const VISIBILITY_GUESTS_ONLY = 'private';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

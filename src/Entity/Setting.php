@@ -8,6 +8,16 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SettingRepository::class)]
 class Setting
 {
+
+    public const SETTING_TYPE_STRING = 'string';
+    public const SETTING_TYPE_INT = 'int';
+    public const SETTING_TYPE_FLOAT = 'float';
+    public const SETTING_TYPE_BOOL = 'bool';
+    public const SETTING_TYPE_ARRAY = 'array';
+    public const SETTING_TYPE_JSON = 'json';
+    public const SETTING_TYPE_OBJECT = 'object';
+    public const SETTING_TYPE_DATE = 'date';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

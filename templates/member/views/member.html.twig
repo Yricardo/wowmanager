@@ -1,8 +1,10 @@
 {% extends 'member/member_base.html.twig' %}
 
-{% block javascripts %}
+{% block title %}User Profile{% endblock %}
+
+{% block stylesheets %}
     {{ parent() }}
-    <script src="{{ asset('js/template-grid-layout/member_grid_custom_overview.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/memberdashboard.css') }}">
 {% endblock %}
 
 {% block template %}
@@ -92,40 +94,7 @@
         {% endblock %}
 
         {% block right %}
-            <h2>Characters</h2>
-            {% if app.user.characters|length > 0 %}
-                <div class="character-list">
-                    {% for character in app.user.characters %}
-                        <div class="character-card">
-                            <div class="character-icon">
-                                <img src="{% if character.characterClass.classImgPath is not null %} 
-                                    {{ asset(character.characterClass.classImgPath) }} 
-                                    {% else %} 
-                                    {{ asset('images/undefinedcharacterimg.jpg') }} 
-                                    {% endif %}" 
-                                    alt="{{ character.name }}">
-                            </div>
-                            <div class="character-details">
-                                <h3>{{ character.name }}</h3>
-                                <p><strong>Class:</strong> {{ character.characterClass.name }}</p>
-                                <p><strong>Level:</strong> {{ character.level }}</p>
-                                <p><strong>Gear Level:</strong> {{ character.gearLevel | default("noob") }}</p>
-                                <p><strong>Guild:</strong> {{ character.guild.name | default("no guild") }}</p>
-                            </div>
-                            <div class="character-links">
-                                <a href="#" class="character-link">⚖️</a>
-                                <a href="#" class="character-link">📅</a>
-                                <a href="#" class="character-link">💰</a>
-                                <a href="#" class="character-link">❌</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p>No characters found for this user.</p>
-            {% endif %}
-            <br>
-            <button class="button-6" role="button">Add</button>
+            {% include 'member/partials/character_list.html.twig' %}
         {% endblock %}
     {% endembed %}
 {% endblock %}

@@ -1,7 +1,9 @@
 <!-- Center Lower Block -->
-<div class="profile-user">
+<div class="profile-user" data-controller="freegrid">
     {% block midle %}
     {% endblock %}
 </div>
 
-<span id="page-state" data-grid="free"></span>
+{% block pagestate %}
+    <span id="page-state" data-layout="free"></span>
+{% endblock %}

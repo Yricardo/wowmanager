@@ -8,7 +8,6 @@ use App\Entity\Character;
 use App\Entity\Item;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
 use App\Repository\AuctionRepository;
 use App\Repository\AuctionBidRepository;
 

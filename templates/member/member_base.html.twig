@@ -9,13 +9,12 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/member.js') }}"></script>
 {% endblock %}
 
 {% block body %}
-    <div class="profile-container">
+    <div class="profile-container" data-controller="grid">
         <!-- Left Block: Activity Feed -->
-        <div class="profile-feed">
+        <div class="profile-feed" data-search-target="feedContainer">
             <h2>Activity Feed</h2> 
 
             <div class="feed-switch">
@@ -61,13 +60,13 @@
             <nav>
                 <ul class="menu-items">
                     <li><a href="{{ path('app_member')}}"><span class="menu-icon">🏠</span> </a></li>
-                    <li><a href="#"><span class="menu-icon">👥</span><span class="notification-badge">3</span></a></li>
+                    <li><a href="{{ path('app_member_friend_list')}}"><span class="menu-icon">👥</span><span class="notification-badge">3</span></a></li>
                     <li><a href="#"><span class="menu-icon">🏰</span><span class="notification-badge">3</span></a></li>
                     <li><a href="{{ path('app_auction_list')}}"><span class="menu-icon">⚖️</span><span class="notification-badge">3</span></a></li>
                     <li><a href="#"><span class="menu-icon">📅</span><span class="notification-badge">3</span></a></li>
                     <li><a href="#"><span class="menu-icon">🎰</span></a></li>
                     <li><a href="#"><span class="menu-icon">✉️</span></a></li>
-                    <li><a href="#"><span class="menu-icon">⚙️</span></a></li>
+                    <li><a href="{{ path('app_member_settings') }}"><span class="menu-icon">⚙️</span></a></li>
                     <li><a href="{{ path('app_logout') }}"><span class="menu-icon">🚪</span></a></li>
                 </ul>
             </nav>
@@ -76,14 +75,19 @@
         {% block template %}
         {% endblock %}
 
-        <button class="feed-icon-button feed-toogle" id="hide-feed" title="Hide Feed" onclick="hideFeed()">
+        <button data-search-target="feedHide" class="feed-icon-button feed-toogle" id="hide-feed" title="Hide Feed" data-action="click->feed#hideFeed">
             <span class="feed-icon">❌</span>
-        </button>        
+        </button>
 
-        <!-- Show Feed Button -->
-        <span id="show-feed" class="feed-toogle">
-            <button class="feed-icon-button" id="show-feed-btn" title="Show Feed" onclick="showFeed()">
+        <span id="show-feed" data-search-target="feedShow" class="feed-toogle" data-action="click->feed#showFeed">
+            <button class="feed-icon-button" id="show-feed-btn" title="Show Feed">
                 <span class="feed-icon">📜</span>
             </button>
         </span>
+    </div>
+{% endblock %}
+
+{% block pagestate %}
+    <!-- important: dont forget to override this whole default block content if you want to use custom grid or state-->
+    <span id="page-state" data-layout="free"></span>
 {% endblock %}

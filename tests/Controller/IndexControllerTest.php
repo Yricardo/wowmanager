@@ -40,7 +40,7 @@ final class IndexControllerTest extends WebTestCase
 
         // Check if the redirect location is correct
         if ($userRole) {
-            $this->assertResponseRedirects($this->userRolesProvider()[0][1]);
+            $this->assertResponseRedirects($expectedRedirect);
         } else {
             $this->assertResponseStatusCodeSame(403);// not sure about this
         }

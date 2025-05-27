@@ -8,6 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: SettingRepository::class)]
 class Setting
 {
+
+    public const SETTING_TYPE_STRING = 'string';
+    public const SETTING_TYPE_INT = 'int';
+    public const SETTING_TYPE_FLOAT = 'float';
+    public const SETTING_TYPE_BOOL = 'bool';
+    public const SETTING_TYPE_ENTITY = 'entity';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -24,6 +31,9 @@ class Setting
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $relatedEntity = null;
+
+    #[ORM\ManyToOne(inversedBy: 'settings')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -74,6 +84,18 @@ class Setting
     public function setRelatedEntity(string $relatedEntity): static
     {
         $this->relatedEntity = $relatedEntity;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

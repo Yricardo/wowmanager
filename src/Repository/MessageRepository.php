@@ -16,29 +16,78 @@ class MessageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Message::class);
     }
-    
-//    /**
-//     * @return Message[] Returns an array of Message objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Message
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * Find complete conversation between two users, sorted by date
+     * 
+     * @return Message[]
+     */
+    public function findConversationBetweenUsers(User $user1, User $user2): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('
+                (m.sender = :user1 AND m.receiver = :user2) OR 
+                (m.sender = :user2 AND m.receiver = :user1)
+            ')
+            ->andWhere('m.isVisible = true')
+            ->setParameter('user1', $user1)
+            ->setParameter('user2', $user2)
+            ->orderBy('m.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Find new messages between users since a specific date
+     * 
+     * @return Message[]
+     */
+    public function findNewMessagesBetweenUsers(User $user1, User $user2, \DateTime $since): array
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.createdAt > :since')
+            ->andWhere('
+                (m.sender = :user2 AND m.receiver = :user1)
+            ')
+            ->andWhere('m.isVisible = true')
+            ->setParameter('since', $since)
+            ->setParameter('user1', $user1)
+            ->setParameter('user2', $user2)
+            ->orderBy('m.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Count unread messages for a user
+     */
+    public function countUnreadMessagesForUser(User $user): int
+    {
+        return $this->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->where('m.receiver = :user')
+            ->andWhere('m.read = false')
+            ->andWhere('m.isVisible = true')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * Find users with whom the given user has conversations
+     * 
+     * @return User[]
+     */
+    public function findConversationPartners(User $user): array
+    {
+        $qb = $this->createQueryBuilder('m');
+        
+        return $qb
+            ->select('DISTINCT IDENTITY(m.sender) as sender_id, IDENTITY(m.receiver) as receiver_id')
+            ->where('m.sender = :user OR m.receiver = :user')
+            ->andWhere('m.isVisible = true')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
 }

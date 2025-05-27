@@ -22,8 +22,6 @@ class InvitationFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $invitation = new Invitation();
 
-            $now = new DateTime();
-
             // Setters according to Invitation entity
             $invitation = (new Invitation())
                 ->setStatus(Invitation::STATUS_PENDING)
@@ -31,7 +29,7 @@ class InvitationFixtures extends Fixture implements DependentFixtureInterface
                 ->setInvitedBy($users[$i])
                 ->setSecretTag(bin2hex(random_bytes(8)))
                 ->setEmail('invited' . ($i + 1) . '@example.com')
-                ->setCreatedAt(new DateTime());
+                ->setCreatedAt(new \DateTimeImmutable());
 
             $manager->persist($invitation);
 

@@ -11,7 +11,7 @@ final class MemberController extends AbstractController
     #[Route('/member', name: 'app_member')]
     public function index(): Response
     {
-        return $this->render('member/member.html.twig', [
+        return $this->render('member/views/member.html.twig', [
             'controller_name' => 'MemberController',
         ]);
     }

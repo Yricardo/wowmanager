@@ -15,6 +15,8 @@ use App\Entity\Character;
 use App\Entity\WowVersion;
 use App\Entity\Guild;
 use App\Entity\AvailableRoleForClass;
+use App\Entity\FriendLink;
+use App\Entity\Setting;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'app_admin')]
 class DashboardController extends AbstractDashboardController
@@ -61,5 +63,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Classes', 'fas fa-list', CharacterClass::class);
         yield MenuItem::linkToCrud('WowVersion', 'fas fa-list', WowVersion::class);
         yield MenuItem::linkToCrud('AvailableRoleForClass', 'fas fa-list', AvailableRoleForClass::class);
+        yield MenuItem::linkToCrud('FriendLink', 'fas fa-list', FriendLink::class);
+        yield MenuItem::linkToCrud('Settings', 'fas fa-list', Setting::class);
     }
 }

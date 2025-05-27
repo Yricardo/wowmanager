@@ -16,7 +16,7 @@ final class AuctionController extends AbstractController
         $userAuctions = $auctionManager->getAuctionsByUser($this->getUser());
         $userBiddedOn = $auctionManager->getAuctionsByBidderUser($this->getUser());
         $userOthersVisibleAuctions = [];//todo implement
-        return $this->render('member/auction/auction_list.html.twig', [
+        return $this->render('member/views/auction_list.html.twig', [
             'userAuctions' => $userAuctions,
             'biddedOn' => $userBiddedOn,
             'visibleAuctions' => $userOthersVisibleAuctions,

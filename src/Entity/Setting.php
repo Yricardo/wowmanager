@@ -13,10 +13,7 @@ class Setting
     public const SETTING_TYPE_INT = 'int';
     public const SETTING_TYPE_FLOAT = 'float';
     public const SETTING_TYPE_BOOL = 'bool';
-    public const SETTING_TYPE_ARRAY = 'array';
-    public const SETTING_TYPE_JSON = 'json';
-    public const SETTING_TYPE_OBJECT = 'object';
-    public const SETTING_TYPE_DATE = 'date';
+    public const SETTING_TYPE_ENTITY = 'entity';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,6 +31,9 @@ class Setting
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $relatedEntity = null;
+
+    #[ORM\ManyToOne(inversedBy: 'settings')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -84,6 +84,18 @@ class Setting
     public function setRelatedEntity(string $relatedEntity): static
     {
         $this->relatedEntity = $relatedEntity;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

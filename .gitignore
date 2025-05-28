@@ -12,6 +12,7 @@
 .vs
 .vscode
 .env
+.env.prod
 
 ###> phpunit/phpunit ###
 /phpunit.xml

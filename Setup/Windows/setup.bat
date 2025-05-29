@@ -11,7 +11,6 @@ REM TODO CHECK IF PACKAGE MANAGER SUPPORTING REDIS AND
 
 REM Enabling redis on php todo fix weakness what if the line is not there
 ./redis-php-setup.ps1
-Write-Host "Install Redis and PHP Redis extension"; choco install redis-64 -y; $ini = (php --ini | Select-String "Loaded Configuration File").ToString().Split(':')[1].Trim(); (Get-Content $ini -Raw) -replace ';extension=redis', 'extension=redis' | Set-Content $ini
 
 REM Check if Composer is installed
 where composer >nul 2>nul

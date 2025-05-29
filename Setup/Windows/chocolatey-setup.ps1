@@ -1,6 +1,3 @@
-@echo off
-setlocal enabledelayedexpansion
-
 echo Checking if Chocolatey is installed...
 
 :: Check if chocolatey is installed by trying to run choco command

@@ -32,51 +32,7 @@ install_symfony_cli()
     #todo manage errors, should shut if not ok.
 }
 
-echo "Setting up Linux development environment..."
-
-# setup-linux.sh (additional Redis security configuration)
-
-# Detect package manager
-if command -v apt-get &> /dev/null; then
-    PACKAGE_MANAGER="apt-get"
-    INSTALL_CMD="sudo apt-get update && sudo apt-get install -y"
-elif command -v yum &> /dev/null; then
-    PACKAGE_MANAGER="yum" 
-    INSTALL_CMD="sudo yum install -y"
-elif command -v dnf &> /dev/null; then
-    PACKAGE_MANAGER="dnf"
-    INSTALL_CMD="sudo dnf install -y"
-else
-    echo "Unsupported package manager"
-    exit 1
-fi
-
-echo Install Redis and PHP Redis extension
-$INSTALL_CMD redis-server php-redis
-
-# Check if Composer is already installed
-if command -v composer &> /dev/null; then
-    echo "✓ Composer is already installed"
-    composer --version
-else
-    echo "Composer not found, installing..."
-    install_composer
-fi
-
-# Verify Composer installation
-if composer --version &> /dev/null; then
-    echo "✓ Composer verification successful"
-else
-    echo "✗ Composer installation failed"
-    exit 1
-fi
-
-cp .env .env.local
-echo "installing depedencies"
-composer install
-
-# Setup redis auth if needed (in prod)
-if command php -v | grep
+# Configure Redis authentication for production
 setup_redis_auth() {
     if [ "$APP_ENV" = "prod" ]; then
         echo "Configuring Redis authentication..."
@@ -99,6 +55,81 @@ setup_redis_auth() {
     fi
 }
 
+ping_redis() {
+    echo "Pinging Redis server..."
+    if redis-cli ping; then
+        echo "✓ Redis server is reachable"
+    else
+        echo "✗ Redis server is not reachable"
+    fi
+}
+
+setup_redis() {
+        
+    echo Install PHP Redis extension
+    $INSTALL_CMD php-redis
+
+    sudo apt-get install lsb-release curl gpg
+    curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+    sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+    sudo apt-get update
+    sudo apt-get install redis        
+
+    sudo systemctl enable redis-server
+    sudo systemctl start redis-server 
+
+    if [ "$APP_ENV" = "prod" ]; then
+        echo "Setup redis for production environment..."
+        # Check if Redis is already installed
+        if ! command -v redis-server &> /dev/null; then
+            setup_redis_auth   
+        else
+            echo "Redis is already installed"
+        fi
+    fi    
+}
+
+echo "Setting up Linux development environment..."
+
+# setup-linux.sh (additional Redis security configuration)
+
+# Detect package manager
+if command -v apt-get &> /dev/null; then
+    PACKAGE_MANAGER="apt-get"
+    INSTALL_CMD="sudo apt-get update && sudo apt-get install -y"
+elif command -v yum &> /dev/null; then
+    PACKAGE_MANAGER="yum" 
+    INSTALL_CMD="sudo yum install -y"
+elif command -v dnf &> /dev/null; then
+    PACKAGE_MANAGER="dnf"
+    INSTALL_CMD="sudo dnf install -y"
+else
+    echo "Unsupported package manager"
+    exit 1
+fi
+
+# Verify Composer installation
+if composer --version &> /dev/null; then
+    echo "✓ Composer verification successful"
+else
+    echo "✗ Composer installation failed"
+    exit 1
+fi
+
+cp .env .env.local
+echo "installing depedencies"
+composer install
+
+# Check if Composer is already installed
+if command -v composer &> /dev/null; then
+    echo "✓ Composer is already installed"
+    composer --version
+else
+    echo "Composer not found, installing..."
+    install_composer
+fi
+
 #todo skip dropping and creating if db created
 echo "creating/overiding DB, apply all migrations";
 php bin/console doc:dat:dr --force
@@ -107,6 +138,8 @@ php bin/console doctrine:migrations:migrate --no-interaction
 
 #call tests commands here
 php bin/console app:config:test
+
+setup_redis
 
 # Install Redis and PHP Redis extension
 $INSTALL_CMD redis-server php-redis
@@ -127,11 +160,6 @@ else
 fi
 
 # Test Redis connection
-echo "Pinging redis..."
-if redis-cli ping | grep -q "PONG"; then
-    echo "✓ Pong"
-else
-    echo "✗ Redis connection failed"
-    echo "Is Redis running on default port 6379?"
-    exit 1
-fi
+ping_redis 
+
+

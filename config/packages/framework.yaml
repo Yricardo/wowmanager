@@ -1,7 +1,17 @@
 # config/packages/framework.yaml
 framework:
+    secret: '%env(APP_SECRET)%'
     session:
         handler_id: '%env(SESSION_HANDLER_ID)%'
         save_path: '%env(SESSION_SAVE_PATH)%'
         cookie_secure: auto
         cookie_samesite: lax
+        cookie_lifetime: 86400  # 24 hours
+        gc_maxlifetime: 86400
+
+when@dev:
+    secret: '%env(APP_SECRET)%'
+    framework:
+        session:
+            handler_id: '%env(SESSION_HANDLER_ID)%'
+            save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'

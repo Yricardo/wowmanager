@@ -83,7 +83,7 @@ try {
 
 $input = Read-Host "Do you want to try downloading Symfony CLI from GitHub (experimental)" -MaskInput
 
-if($input === 'y' || $input === 'yes')
+if($input -eq 'y' -or $input -eq 'yes')
 {
     # Create temp directory
     $tempDir = Join-Path $env:TEMP "symfony-cli"

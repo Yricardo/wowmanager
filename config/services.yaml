@@ -26,7 +26,8 @@ services:
         class: Redis
         factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
         arguments:
-            - '%env(REDIS_URL)%'
+            - '%env(REDIS_SESSION_DSN)%'
+
     # Redis session handler
     app.session.handler.redis:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
@@ -39,4 +40,16 @@ services:
         factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
         arguments:
             - '%env(REDIS_SESSION_DSN)%'
-            - { retry_interval: 2, read_timeout: 10 }            
+            - { retry_interval: 2, read_timeout: 10 }
+
+    # Redis connection with authentication support
+    app.redis.connection:
+        class: Redis
+        factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
+        arguments:
+            - '%env(REDIS_URL)%'
+            - { 
+                retry_interval: 2, 
+                read_timeout: 10,
+                auth: '%env(REDIS_PASSWORD)%'
+              }                        

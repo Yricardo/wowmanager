@@ -21,7 +21,7 @@ class Message
     private ?User $receiver = null;
 
     #[ORM\Column]
-    private ?bool $read = null;
+    private ?bool $isRead = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -63,12 +63,12 @@ class Message
 
     public function isRead(): ?bool
     {
-        return $this->read;
+        return $this->isRead;
     }
 
     public function setRead(bool $read): static
     {
-        $this->read = $read;
+        $this->isRead = $read;
 
         return $this;
     }

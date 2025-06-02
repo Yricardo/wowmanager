@@ -11,6 +11,7 @@ use App\Entity\Item;
 use App\Entity\OwnedItem;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
+#[ORM\Table(name: 'game_character')]
 class Character
 {
     #[ORM\Id]

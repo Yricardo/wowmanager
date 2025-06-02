@@ -35,6 +35,9 @@ class Setting
     #[ORM\ManyToOne(inversedBy: 'settings')]
     private ?User $user = null;
 
+    #[ORM\Column]
+    private ?bool $isGlobal = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,6 +99,18 @@ class Setting
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function isGlobal(): ?bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): static
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

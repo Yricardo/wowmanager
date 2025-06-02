@@ -66,7 +66,7 @@ class MessageRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->select('COUNT(m.id)')
             ->where('m.receiver = :user')
-            ->andWhere('m.read = false')
+            ->andWhere('m.isRead = false')
             ->andWhere('m.isVisible = true')
             ->setParameter('user', $user)
             ->getQuery()

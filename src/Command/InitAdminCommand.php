@@ -6,13 +6,10 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use App\Entity\User;
 use App\Managers\SettingManager;
 use App\Managers\UserManager;
 use App\Helper\SettingHelper;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherInterface;
 use Psr\Log\LoggerInterface;
 
 #[AsCommand(name: 'powtatow:base:launch', description: 'Initialize the base settings and create the super admin user')]
@@ -71,6 +68,7 @@ class InitAdminCommand extends Command
             return Command::FAILURE;
         }
     }
+
     /**
      * Configure command arguments for WoW Manager initialization
      * 

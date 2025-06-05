@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -71,4 +71,4 @@ class SettingsFixtures extends Fixture implements DependentFixtureInterface
 			UserFixtures::class
 		];
 	}    
-}
+}*/

@@ -28,19 +28,22 @@ class UserManager
      * @param string $password Password for the new member
      * @return User The created member user
      * @throws \Exception When user creation fails
-     */    public function addMember(string $username, string $password): User
+     */    
+    public function addMember(string $username, string $password, string $code): User
     {
+        //todo when invitation system done, trigger verification with invitation code and burn invitation
         return $this->addUser($username, $password, ['ROLE_USER','ROLE_MEMBER']);
     }
 
     /**
-     * Add admin user with elevated permissions
+     * Add admin user with elevated permissions, only super admin can create admins
      * 
      * @param string $username Username for the new admin
      * @param string $password Password for the new admin
      * @return User The created admin user
      * @throws \Exception When user creation fails
-     */    public function addAdmin(string $username, string $password): User 
+     */    
+    public function addAdmin(string $username, string $password): User 
     {
         return $this->addUser($username, $password, ['ROLE_USER','ROLE_ADMIN','ROLE_MEMBER']);        
     }
@@ -90,7 +93,7 @@ class UserManager
         $this->em->flush();
         
         // Now generate settings for the persisted user
-        $this->settingManager->generateSettingsForUser($user);
+        //$this->settingManager->generateSettingsForUser($user);
         
         return $user;
     }

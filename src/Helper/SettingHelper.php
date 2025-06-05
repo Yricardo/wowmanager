@@ -85,7 +85,7 @@ class SettingHelper {
             case self::SETTING_TYPE_ENTITY :
                 return (string)$setting->getValue();//todo implement
             default:
-                throw new Exception('unsupported field type ' . $setting->getType());
+                throw new \Exception('unsupported field type ' . $setting->getType());
         }
         return $value;
     }

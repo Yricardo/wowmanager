@@ -6,17 +6,21 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Setting;
 use App\Entity\User;
 use App\Repository\SettingRepository;
-use App\Form\Settings\SettingFormHelper;
-use App\Form\DataObject\Settings\SettingsDataObject;
 use App\Helper\SettingHelper;
+use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 
 class SettingManager
 {
     public function __construct(
+        private UserRepository $userRepository,
         private SettingRepository $repository,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private LoggerInterface $logger    
     ) 
-    {}/**
+    {}
+    
+    /**
      * Get settings for a user based on their role
      * 
      * @param User $user The user to get settings for
@@ -24,16 +28,23 @@ class SettingManager
      */
     public function getSettings(User $user): array
     {
-        $supportedSettingsNames = \in_array('ROLE_ADMIN', $user->getRoles()) 
-            ? SettingHelper::getSupportedSettingsNames() 
-            : SettingHelper::getSupportedUserSettingsNames();
-        
-        $settings = $this->repository->findBy(['user' => $user]);
-        
+        try {
+            $supportedSettingsNames = \in_array('ROLE_ADMIN', $user->getRoles()) 
+                ? SettingHelper::getSupportedSettingsNames() 
+                : SettingHelper::getSupportedUserSettingsNames();
+            $settings = $this->repository->findBy(['user' => $user]);
+        } catch (\Exception $e) {
+            $this->logger->error('Error fetching settings for user: ' . $user->getUsername(), [
+                'exception' => $e
+            ]);
+            return [];
+        }
         return \array_filter($settings, function($setting) use ($supportedSettingsNames){
             return \in_array($setting->getName(), $supportedSettingsNames);
         });
-    }    /**
+    }    
+    
+    /**
      * Get setting value for a specific user
      * 
      * @param string $name Setting name
@@ -46,14 +57,15 @@ class SettingManager
             // TODO: log error trying to access undefined setting
             return null;
         }
-        
         $setting = $this->repository->findOneBy(['name' => $name, 'user' => $user]);
         if (!$setting) {
             return null;
         }
         
         return SettingHelper::formatValue($setting);        
-    }/**
+    }
+    
+    /**
      * Generate default settings for a user
      * 
      * @param User $user The user to generate settings for
@@ -63,20 +75,38 @@ class SettingManager
     {
         $mapping = SettingHelper::getNameValueTypesAndDefaultValueMapping();
         
-        foreach (SettingHelper::getSupportedUserSettingsNames() as $settingName) {
+        foreach (SettingHelper::getSupportedUserSettingsNames() as $settingName) 
+        {
             $settingDefinition = $mapping[$settingName];
-
-            $this->addSettingEntry(
-                $settingName, 
-                $settingDefinition['defaultValue'], 
-                $settingDefinition['type'], 
-                $user, 
-                false
-            );
+            try {
+                $this->addSettingEntry(
+                    $settingName,
+                    $settingDefinition['defaultValue'],
+                    $settingDefinition['type'],
+                    $user
+                );
+            } catch (\Exception $e) {
+                if(!($undhandled ?? false))
+                {
+                    $undhandled = [];
+                }
+                $undhandled[] = $settingName;
+                // Log the error and continue with the next setting
+                $this->logger->error('Failed to create setting for user', [
+                    'user' => $user->getUsername(),
+                    'setting' => $settingName,
+                    'error' => $e->getMessage()
+                ]);
+            }
         }
-    }    /**
+        if (($undhandled ?? false) && \count($undhandled) > 0) 
+        {
+            throw new \Exception('Failed to create some settings for user: ' . implode(', ', $undhandled));
+        }
+    }    
+    
+    /**
      * Generate global system settings (super admin only)
-     * 
      * @param User $supposedSuperAdmin The super admin user
      * @throws \Exception When user is not super admin or setting creation fails
      */
@@ -87,7 +117,47 @@ class SettingManager
         foreach (SettingHelper::getSupportedGlobalSettingsNames() as $settingName) {
             $this->addGlobalSettingEntry($supposedSuperAdmin, $settingName, $mapping[$settingName]['type']);
         }
-    }    /**
+    }    
+
+    /**
+     * Add user setting entry. (you should never have to call this method directly, 
+     * settings should be created on user persistence and via SettingHelper::createUserSettingEntriesIfMissing() 
+     * in App\Command\UpdateSettingsForUsers::createUserSettingEntriesIfMissing()
+     * 
+     * @param User $supposedSuperAdmin The super admin user
+     * @param string $name Setting name
+     * @param string $type Setting type
+     * @throws \Exception When user is not super admin or setting is invalid
+     */
+    public function addUserSettingEntry(string $name, User $user): void
+    {
+        if (\in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
+            throw new \Exception('Cannot add user setting entry to super admin user');
+        }
+        if (!\in_array($name, SettingHelper::getSupportedUserSettingsNames())) {
+            throw new \Exception('Invalid setting name passed: ' . $name);
+        }
+        
+        $mapping = SettingHelper::getNameValueTypesAndDefaultValueMapping();
+        if (!isset($mapping[$name])) {
+            $this->logger->error('Missing mapping for setting', [
+                'setting_name' => $name,
+                'called_by' => debug_backtrace()[1]['function']
+            ]);
+            throw new \Exception('Missing mapping for ' . $name);
+        }
+        
+        $this->addSettingEntry(
+            $name, 
+            $mapping[$name]['defaultValue'], 
+            $mapping[$name]['type'], 
+            $user, 
+            false
+        );
+    }
+
+
+    /**
      * Add global setting entry (super admin only)
      * 
      * @param User $supposedSuperAdmin The super admin user
@@ -118,7 +188,8 @@ class SettingManager
             true
         );
     }
-   
+
+
     public function updateSettingValue(string $name, string $value)
     {
         //check value integrity
@@ -131,12 +202,12 @@ class SettingManager
         {
             if(!$this->isSettingAllowedFor($currentUser, $settingName))
             {
-                throw new Exception('current user is not permitted to write into ' . $settingName . ' setting.');
+                throw new \Exception('current user is not permitted to write into ' . $settingName . ' setting.');
             }
             //if conf to update is global, it is linked to super admin (there can only be one super admin and a global conf exists once).
             if(\in_array($settingName, SettingHelper::getSupportedGlobalSettingsNames()))
             {
-                $currentUser = $userRepository->findByRole('superadmin')[0];
+                $currentUser = $this->userRepository->findByRole('superadmin')[0];
             }    
             $this->repository->updateSettingValueByName($currentUser, $settingName, $value);
         }

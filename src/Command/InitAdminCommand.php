@@ -12,7 +12,7 @@ use App\Helper\SettingHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Psr\Log\LoggerInterface;
 
-#[AsCommand(name: 'powtatow:base:launch', description: 'Initialize the base settings and create the super admin user')]
+#[AsCommand(name: 'powtato:base:launch', description: 'Initialize the base settings and create the super admin user')]
 class InitAdminCommand extends Command
 {    /**
      * Constructor with dependency injection for gaming platform initialization

@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -56,7 +56,8 @@ class SettingsFixtures extends Fixture implements DependentFixtureInterface
                 ->setUser($user)
                 ->setName($settingData['name'])
                 ->setType($settingData['type'])
-                ->setValue($settingData['value']);
+                ->setValue($settingData['value'])
+                ->setIsGlobal(false);
                 $manager->persist($setting);
             }
         }
@@ -70,4 +71,4 @@ class SettingsFixtures extends Fixture implements DependentFixtureInterface
 			UserFixtures::class
 		];
 	}    
-}
+}*/

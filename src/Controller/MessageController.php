@@ -58,7 +58,28 @@ final class MessageController extends AbstractController
                 'error' => 'Failed to send message'
             ], 500);
         }
-    }
+    }    
+    
+    #[Route('/list', name: 'app_member_message_list')]
+    public function conversationList(): Response
+    {
+        try {
+            $friends = $this->friendLinkRepository->getFriendsByUser($this->getUser());
+
+            return $this->render('member/views/message_list.html.twig', [
+                'friends' => $friends
+            ]);
+            
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to load conversations list', [
+                'error' => $e->getMessage(),
+                'user' => $this->getUser()->getId()
+            ]);
+            
+            $this->addFlash('error', 'Failed to load conversations');
+            return $this->redirectToRoute('app_member');
+        }        
+    }    
 
     #[Route('/{id}', name: 'app_member_message')]
     public function conversation(User $user): Response
@@ -75,7 +96,7 @@ final class MessageController extends AbstractController
             
         } catch (MessageException $e) {
             $this->addFlash('error', $e->getMessage());
-            return $this->redirectToRoute('app_member_dashboard'); // or appropriate route
+            return $this->redirectToRoute('app_member');
             
         } catch (\Exception $e) {
             $this->logger->error('Failed to load conversation', [
@@ -85,7 +106,7 @@ final class MessageController extends AbstractController
             ]);
             
             $this->addFlash('error', 'Failed to load conversation');
-            return $this->redirectToRoute('app_member_dashboard');
+            return $this->redirectToRoute('app_member');
         }
     }
 
@@ -142,6 +163,7 @@ final class MessageController extends AbstractController
         }
     }
 
+    //todo refactor into helper
     /**
      * Parse and validate timestamp parameter
      * 

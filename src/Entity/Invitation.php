@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\InvitationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InvitationRepository::class)]
@@ -21,9 +22,6 @@ class Invitation
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
-
     #[ORM\ManyToOne(inversedBy: 'invitations')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $invitedBy = null;
@@ -36,6 +34,15 @@ class Invitation
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $forRole = null;
+
+    #[ORM\Column]
+    private ?int $timeToLive = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $personnalMessage = null;
 
     public function getId(): ?int
     {
@@ -50,18 +57,6 @@ class Invitation
     public function setStatus(string $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
 
         return $this;
     }
@@ -110,6 +105,42 @@ class Invitation
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getForRole(): ?string
+    {
+        return $this->forRole;
+    }
+
+    public function setForRole(string $forRole): static
+    {
+        $this->forRole = $forRole;
+
+        return $this;
+    }
+
+    public function getTimeToLive(): ?int
+    {
+        return $this->timeToLive;
+    }
+
+    public function setTimeToLive(int $timeToLive): static
+    {
+        $this->timeToLive = $timeToLive;
+
+        return $this;
+    }
+
+    public function getPersonnalMessage(): ?string
+    {
+        return $this->personnalMessage;
+    }
+
+    public function setPersonnalMessage(?string $personnalMessage): static
+    {
+        $this->personnalMessage = $personnalMessage;
 
         return $this;
     }

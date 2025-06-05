@@ -27,7 +27,7 @@ class Server
     /**
      * @var Collection<int, Character>
      */
-    #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'server')]
+    #[ORM\OneToMany(targetEntity: Character::class, mappedBy: 'characterServer')]
     private Collection $characters;
 
     #[ORM\ManyToOne(inversedBy: 'servers')]

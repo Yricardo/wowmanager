@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250531110348 extends AbstractMigration
+final class Version20250602113151 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,9 +28,6 @@ final class Version20250531110348 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE available_role_for_class (id INT AUTO_INCREMENT NOT NULL, class_id INT NOT NULL, role_id INT DEFAULT NULL, INDEX IDX_AD84205DEA000B10 (class_id), INDEX IDX_AD84205DD60322AC (role_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
-        SQL);
-        $this->addSql(<<<'SQL'
-            CREATE TABLE `character` (id INT AUTO_INCREMENT NOT NULL, server_id INT NOT NULL, character_class_id INT NOT NULL, chosen_role_id INT DEFAULT NULL, race_id INT DEFAULT NULL, user_id INT NOT NULL, guild_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, level SMALLINT NOT NULL, gear_level INT DEFAULT NULL, INDEX IDX_937AB0341844E6B7 (server_id), INDEX IDX_937AB034B201E281 (character_class_id), INDEX IDX_937AB0342CF79437 (chosen_role_id), INDEX IDX_937AB0346E59D40D (race_id), INDEX IDX_937AB034A76ED395 (user_id), INDEX IDX_937AB0345F2131EF (guild_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE character_class (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, class_img_path VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -51,6 +48,9 @@ final class Version20250531110348 extends AbstractMigration
             CREATE TABLE friend_link (id INT AUTO_INCREMENT NOT NULL, user1_id INT NOT NULL, user2_id INT NOT NULL, INDEX IDX_ACD6451156AE248B (user1_id), INDEX IDX_ACD64511441B8B65 (user2_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
+            CREATE TABLE game_character (id INT AUTO_INCREMENT NOT NULL, server_id INT NOT NULL, character_class_id INT NOT NULL, chosen_role_id INT DEFAULT NULL, race_id INT DEFAULT NULL, user_id INT NOT NULL, guild_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, level SMALLINT NOT NULL, gear_level INT DEFAULT NULL, INDEX IDX_41DC71361844E6B7 (server_id), INDEX IDX_41DC7136B201E281 (character_class_id), INDEX IDX_41DC71362CF79437 (chosen_role_id), INDEX IDX_41DC71366E59D40D (race_id), INDEX IDX_41DC7136A76ED395 (user_id), INDEX IDX_41DC71365F2131EF (guild_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+        SQL);
+        $this->addSql(<<<'SQL'
             CREATE TABLE guild (id INT AUTO_INCREMENT NOT NULL, server_id INT NOT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_75407DAB1844E6B7 (server_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
@@ -60,7 +60,7 @@ final class Version20250531110348 extends AbstractMigration
             CREATE TABLE item (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, id_wow INT NOT NULL, img_path VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE message (id INT AUTO_INCREMENT NOT NULL, sender_id INT DEFAULT NULL, receiver_id INT DEFAULT NULL, `read` TINYINT(1) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', is_visible TINYINT(1) NOT NULL, content LONGTEXT NOT NULL, INDEX IDX_B6BD307FF624B39D (sender_id), INDEX IDX_B6BD307FCD53EDB6 (receiver_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE message (id INT AUTO_INCREMENT NOT NULL, sender_id INT DEFAULT NULL, receiver_id INT DEFAULT NULL, is_read TINYINT(1) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', is_visible TINYINT(1) NOT NULL, content LONGTEXT NOT NULL, INDEX IDX_B6BD307FF624B39D (sender_id), INDEX IDX_B6BD307FCD53EDB6 (receiver_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE notification (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, link VARCHAR(300) DEFAULT NULL, description LONGTEXT NOT NULL, `read` TINYINT(1) NOT NULL, INDEX IDX_BF5476CAA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -78,7 +78,7 @@ final class Version20250531110348 extends AbstractMigration
             CREATE TABLE server (id INT AUTO_INCREMENT NOT NULL, wow_version_id INT NOT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_5A6DD5F6643861C3 (wow_version_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE setting (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, value VARCHAR(255) NOT NULL, related_entity VARCHAR(255) DEFAULT NULL, INDEX IDX_9F74B898A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
+            CREATE TABLE setting (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(255) NOT NULL, value VARCHAR(255) NOT NULL, related_entity VARCHAR(255) DEFAULT NULL, is_global TINYINT(1) NOT NULL, INDEX IDX_9F74B898A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
         SQL);
         $this->addSql(<<<'SQL'
             CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)', trust_score INT NOT NULL, UNIQUE INDEX UNIQ_IDENTIFIER_USERNAME (username), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
@@ -96,7 +96,7 @@ final class Version20250531110348 extends AbstractMigration
             ALTER TABLE auction ADD CONSTRAINT FK_DEE4F593D614C7E7 FOREIGN KEY (price_id) REFERENCES price (id)
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE auction ADD CONSTRAINT FK_DEE4F5938DE820D9 FOREIGN KEY (seller_id) REFERENCES `character` (id)
+            ALTER TABLE auction ADD CONSTRAINT FK_DEE4F5938DE820D9 FOREIGN KEY (seller_id) REFERENCES game_character (id)
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE auction ADD CONSTRAINT FK_DEE4F593806AE144 FOREIGN KEY (minimum_buy_price_id) REFERENCES price (id)
@@ -105,7 +105,7 @@ final class Version20250531110348 extends AbstractMigration
             ALTER TABLE auction ADD CONSTRAINT FK_DEE4F5935A0AE2D2 FOREIGN KEY (buyout_price_id) REFERENCES price (id)
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE auction_bid ADD CONSTRAINT FK_401A9C43BE40AFAE FOREIGN KEY (bidder_id) REFERENCES `character` (id)
+            ALTER TABLE auction_bid ADD CONSTRAINT FK_401A9C43BE40AFAE FOREIGN KEY (bidder_id) REFERENCES game_character (id)
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE auction_bid ADD CONSTRAINT FK_401A9C43D614C7E7 FOREIGN KEY (price_id) REFERENCES price (id)
@@ -118,24 +118,6 @@ final class Version20250531110348 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE available_role_for_class ADD CONSTRAINT FK_AD84205DD60322AC FOREIGN KEY (role_id) REFERENCES character_role (id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` ADD CONSTRAINT FK_937AB0341844E6B7 FOREIGN KEY (server_id) REFERENCES server (id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` ADD CONSTRAINT FK_937AB034B201E281 FOREIGN KEY (character_class_id) REFERENCES character_class (id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` ADD CONSTRAINT FK_937AB0342CF79437 FOREIGN KEY (chosen_role_id) REFERENCES character_role (id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` ADD CONSTRAINT FK_937AB0346E59D40D FOREIGN KEY (race_id) REFERENCES race (id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` ADD CONSTRAINT FK_937AB034A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` ADD CONSTRAINT FK_937AB0345F2131EF FOREIGN KEY (guild_id) REFERENCES guild (id)
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE event_log ADD CONSTRAINT FK_9EF0AD16C54C8C93 FOREIGN KEY (type_id) REFERENCES event_type (id)
@@ -151,6 +133,24 @@ final class Version20250531110348 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE friend_link ADD CONSTRAINT FK_ACD64511441B8B65 FOREIGN KEY (user2_id) REFERENCES user (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character ADD CONSTRAINT FK_41DC71361844E6B7 FOREIGN KEY (server_id) REFERENCES server (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character ADD CONSTRAINT FK_41DC7136B201E281 FOREIGN KEY (character_class_id) REFERENCES character_class (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character ADD CONSTRAINT FK_41DC71362CF79437 FOREIGN KEY (chosen_role_id) REFERENCES character_role (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character ADD CONSTRAINT FK_41DC71366E59D40D FOREIGN KEY (race_id) REFERENCES race (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character ADD CONSTRAINT FK_41DC7136A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character ADD CONSTRAINT FK_41DC71365F2131EF FOREIGN KEY (guild_id) REFERENCES guild (id)
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE guild ADD CONSTRAINT FK_75407DAB1844E6B7 FOREIGN KEY (server_id) REFERENCES server (id)
@@ -171,7 +171,7 @@ final class Version20250531110348 extends AbstractMigration
             ALTER TABLE owned_item ADD CONSTRAINT FK_5C32A708126F525E FOREIGN KEY (item_id) REFERENCES item (id)
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE owned_item ADD CONSTRAINT FK_5C32A7081136BE75 FOREIGN KEY (character_id) REFERENCES `character` (id)
+            ALTER TABLE owned_item ADD CONSTRAINT FK_5C32A7081136BE75 FOREIGN KEY (character_id) REFERENCES game_character (id)
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE server ADD CONSTRAINT FK_5A6DD5F6643861C3 FOREIGN KEY (wow_version_id) REFERENCES wow_version (id)
@@ -215,24 +215,6 @@ final class Version20250531110348 extends AbstractMigration
             ALTER TABLE available_role_for_class DROP FOREIGN KEY FK_AD84205DD60322AC
         SQL);
         $this->addSql(<<<'SQL'
-            ALTER TABLE `character` DROP FOREIGN KEY FK_937AB0341844E6B7
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` DROP FOREIGN KEY FK_937AB034B201E281
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` DROP FOREIGN KEY FK_937AB0342CF79437
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` DROP FOREIGN KEY FK_937AB0346E59D40D
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` DROP FOREIGN KEY FK_937AB034A76ED395
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE `character` DROP FOREIGN KEY FK_937AB0345F2131EF
-        SQL);
-        $this->addSql(<<<'SQL'
             ALTER TABLE event_log DROP FOREIGN KEY FK_9EF0AD16C54C8C93
         SQL);
         $this->addSql(<<<'SQL'
@@ -246,6 +228,24 @@ final class Version20250531110348 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE friend_link DROP FOREIGN KEY FK_ACD64511441B8B65
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character DROP FOREIGN KEY FK_41DC71361844E6B7
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character DROP FOREIGN KEY FK_41DC7136B201E281
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character DROP FOREIGN KEY FK_41DC71362CF79437
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character DROP FOREIGN KEY FK_41DC71366E59D40D
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character DROP FOREIGN KEY FK_41DC7136A76ED395
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE game_character DROP FOREIGN KEY FK_41DC71365F2131EF
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE guild DROP FOREIGN KEY FK_75407DAB1844E6B7
@@ -284,9 +284,6 @@ final class Version20250531110348 extends AbstractMigration
             DROP TABLE available_role_for_class
         SQL);
         $this->addSql(<<<'SQL'
-            DROP TABLE `character`
-        SQL);
-        $this->addSql(<<<'SQL'
             DROP TABLE character_class
         SQL);
         $this->addSql(<<<'SQL'
@@ -303,6 +300,9 @@ final class Version20250531110348 extends AbstractMigration
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE friend_link
+        SQL);
+        $this->addSql(<<<'SQL'
+            DROP TABLE game_character
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE guild

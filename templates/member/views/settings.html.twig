@@ -3,11 +3,181 @@
 {% block template %}
     {% embed 'member/member_base_layouts/member_base_free_grid.html.twig' %}
         {% block midle %}
-            <!-- todo implement the settings page -->
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button type="submit" class="btn btn-primary"> {{ button_label|default('Send') }} </button>
-            {{ form_end(form) }}
+            <div style="max-height:100%;max-width:100%;">
+                <div class="messenger-container" style="max-width: 100%; min-width: 100%; max-height: 100%; min-height: 100%; margin: 0 auto; height: 600px; display: flex; flex-direction: column; background: #23272b; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); overflow-y: auto;">
+                    
+                    <!-- Header -->
+                    <div class="messenger-header" style="padding: 1.5rem; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: center;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⚙️</div>
+                            <h2 style="margin: 0; color: #fff;">Settings</h2>
+                            <p style="margin: 0.5rem 0 0 0; color: #aaa;">Customize your experience</p>
+                        </div>
+                    </div>
+
+                    <!-- Settings Form Container -->
+                    <div style="max-width: 100%;">
+                        <div class="wow-settings-container" style="max-width: 100%; margin: 0;">
+                            {{ form_start(form, {attr: {class: 'wow-login-form', style: 'background: transparent; box-shadow: none; padding: 0; width: 100%;'}}) }}
+                            
+                            <!-- Dynamic Form Fields -->
+                            {% for field in form %}
+                                {% if field.vars.name != '_token' %}
+                                    <div class="wow-form-group" style="margin-bottom: 2rem;">
+                                        <!-- Custom Field Label with Icon -->
+                                        <div style="display: flex; align-items: center; margin-bottom: 0.75rem;">
+                                            <div style="font-size: 1.2rem; margin-right: 0.5rem;">
+                                                {% if 'color' in field.vars.name %}🎨
+                                                {% elseif 'theme' in field.vars.name %}🌙
+                                                {% elseif 'language' in field.vars.name %}🌍
+                                                {% elseif 'notification' in field.vars.name %}🔔
+                                                {% elseif 'privacy' in field.vars.name %}🔒
+                                                {% elseif 'display' in field.vars.name %}🖥️
+                                                {% elseif 'border' in field.vars.name %}🖼️
+                                                {% elseif 'toggle' in field.vars.name %}🖼️
+                                                {% elseif 'sound' in field.vars.name %}🔊
+                                                {% else %}⚙️{% endif %}
+                                            </div>
+                                            <label for="{{ field.vars.id }}" style="color: #fff; font-weight: bold; font-size: 1.1rem; margin: 0;">
+                                                {{ field.vars.label|default(field.vars.name|title) }}
+                                            </label>
+                                        </div>
+                                        
+                                        <!-- Field Description (if available) -->
+                                        {% if field.vars.help is defined and field.vars.help %}
+                                            <div style="margin-bottom: 0.5rem; color: #aaa; font-size: 0.9em; font-style: italic;">
+                                                {{ field.vars.help }}
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- Dynamic Field Rendering -->
+                                        {% if field.vars.block_prefixes[1] == 'choice' %}
+                                            <!-- Custom Select Styling -->
+                                            {{ form_widget(field, {
+                                                attr: {
+                                                    class: 'wow-select',
+                                                    style: 'width: 100%; padding: 0.75rem; border-radius: 8px; border: 2px solid #444; background: #2c3136; color: #fff; font-size: 1rem;'
+                                                }
+                                            }) }}
+                                        {% elseif field.vars.block_prefixes[1] == 'textarea' %}
+                                            <!-- Custom Textarea Styling -->
+                                            {{ form_widget(field, {
+                                                attr: {
+                                                    class: 'wow-textarea',
+                                                    style: 'width: 100%; padding: 0.75rem; border-radius: 8px; border: 2px solid #444; background: #2c3136; color: #fff; font-size: 1rem; min-height: 100px; resize: vertical;'
+                                                }
+                                            }) }}
+                                        {% elseif field.vars.block_prefixes[1] == 'checkbox' %}
+                                            <!-- Custom Checkbox Styling -->
+                                            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: #2c3136; border-radius: 8px; border: 2px solid #444;">
+                                                {{ form_widget(field, {
+                                                    attr: {
+                                                        style: 'width: 20px; height: 20px; accent-color: #4f8cff;'
+                                                    }
+                                                }) }}
+                                                <span style="color: #fff; font-size: 1rem;">
+                                                    {{ field.vars.label|default('Enable this setting') }}
+                                                </span>
+                                            </div>
+                                        {% elseif 'color' in field.vars.name %}
+                                            <!-- Custom Color Picker -->
+                                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                                {{ form_widget(field, {
+                                                    attr: {
+                                                        class: 'wow-color-picker',
+                                                        style: 'width: 80px; height: 50px; border-radius: 8px; border: 2px solid #444; background: transparent; cursor: pointer;'
+                                                    }
+                                                }) }}
+                                                <div style="background: #2c3136; padding: 0.5rem 1rem; border-radius: 6px; color: #aaa; font-family: monospace;">
+                                                    {{ field.vars.value|default('#000000') }}
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <!-- Default Input Styling -->
+                                            {{ form_widget(field, {
+                                                attr: {
+                                                    class: 'wow-input',
+                                                    style: 'width: 100%; padding: 0.75rem; border-radius: 8px; border: 2px solid #444; background: #2c3136; color: #fff; font-size: 1rem;'
+                                                }
+                                            }) }}
+                                        {% endif %}
+                                        
+                                        <!-- Field Errors -->
+                                        {% if field.vars.errors|length > 0 %}
+                                            <div style="margin-top: 0.5rem; color: #e74c3c; font-size: 0.9em;">
+                                                {% for error in field.vars.errors %}
+                                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                        <span>⚠️</span>{{ error.message }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- Submit Button -->
+                            <div style="margin-top: 2rem; text-align: center;">
+                                <button type="submit" class="button-6" style="padding: 1rem 3rem; font-size: 1.2rem; background: linear-gradient(135deg, #4f8cff 0%, #9b59b6 100%); border-radius: 25px; display: inline-flex; align-items: center; gap: 0.75rem;">
+                                    <span style="font-size: 1.3rem;">💾</span>
+                                    {{ button_label|default('Save Settings') }}
+                                    <span style="font-size: 1.1rem;">✨</span>
+                                </button>
+                            </div>
+                            
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Styling for Form Elements -->
+            <style>
+                .wow-input:focus, .wow-select:focus, .wow-textarea:focus {
+                    border-color: #4f8cff !important;
+                    box-shadow: 0 0 15px rgba(79, 140, 255, 0.3) !important;
+                    outline: none !important;
+                }
+                
+                .wow-color-picker:hover {
+                    transform: scale(1.05);
+                    transition: transform 0.2s ease;
+                }
+                
+                .wow-form-group:hover .wow-input,
+                .wow-form-group:hover .wow-select,
+                .wow-form-group:hover .wow-textarea {
+                    border-color: #666;
+                    transition: border-color 0.3s ease;
+                }
+                
+                /* Custom checkbox styling */
+                input[type="checkbox"] {
+                    appearance: none;
+                    -webkit-appearance: none;
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid #4f8cff;
+                    border-radius: 4px;
+                    background: #2c3136;
+                    cursor: pointer;
+                    position: relative;
+                }
+                
+                input[type="checkbox"]:checked {
+                    background: #4f8cff;
+                }
+                
+                input[type="checkbox"]:checked::after {
+                    content: '✓';
+                    position: absolute;
+                    top: -2px;
+                    left: 2px;
+                    color: white;
+                    font-size: 14px;
+                    font-weight: bold;
+                }
+            </style>
         {% endblock %}
     {% endembed %}
 {% endblock %}

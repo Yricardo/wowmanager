@@ -46,7 +46,6 @@ class TestPasswordCommand extends Command
         }
         
         $output->writeln('✅ <info>User found:</info> ' . $user->getUsername());
-        $output->writeln('📧 <info>Email:</info> ' . ($user->getEmail() ?? 'No email set'));
         $output->writeln('🔑 <info>Roles:</info> ' . implode(', ', $user->getRoles()));
         $output->writeln('');
         

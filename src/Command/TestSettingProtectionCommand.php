@@ -17,7 +17,7 @@ use App\Helper\SettingHelper;
  * @todo Refactor into unit test
  */
 #[AsCommand(
-    name: 'powtatow:test:setting-protection',
+    name: 'powtato:test:setting-protection',
     description: 'Test setting duplication protection by attempting to create duplicate settings'
 )]
 class TestSettingProtectionCommand extends Command

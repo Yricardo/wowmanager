@@ -13,9 +13,9 @@ use App\Managers\SettingManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
-//todo test this command when you'll need it. it should be run only once after the update of the app, to ensure all users have the latest settings
+//todo refactor into unit test
 #[AsCommand(
-    name: 'powtatow:update-settings-for-users',
+    name: 'powtato:update-settings-for-users',
     description: 'Update settings for all users to ensure they have the latest configuration.'
 )]
 class UpdateSettingsForUsers extends Command

@@ -12,7 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 //todo refactor into unit test
 #[AsCommand(
-    name: 'powtatow:superadminprotectiontest',
+    name: 'powtato:superadminprotectiontest',
     description: 'Test super admin protection by attempting to create a second super admin directly via Doctrine'
 )]
 class TestSuperAdminProtectionCommand extends Command

@@ -3,7 +3,10 @@
 {% block template %}
     {% embed 'member/member_base_layouts/member_base_free_grid.html.twig' %}
         {% block midle %}
-            <div style="height:100%;width:100%;">
+            <div style="height:100%;width:100%;" 
+                 data-controller="invtation-list" 
+                 data-invtation-list-base-url-value="{{ path('app_member_invitation_list') }}">
+                
                 <div class="messenger-container" style="max-width: 100%; min-width: 100%; max-height: 100%; min-height: 100%; margin: 0 auto; height: 600px; display: flex; flex-direction: column; background: #23272b; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.15);">
                     
                     <!-- Header with Create Button -->
@@ -37,18 +40,28 @@
                     <!-- Filter and Search -->
                     <div style="padding: 1rem 1.5rem; border-bottom: 1px solid #333; display: flex; gap: 1rem; align-items: center;">
                         <div style="flex: 1;">
-                            <input type="text" placeholder="Search by email or username..." 
+                            <input type="text" 
+                                   placeholder="Search by email or username..." 
+                                   data-invtation-list-target="searchInput"
                                    style="width: 100%; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid #555; background: #1a1d21; color: #fff; font-size: 0.9rem;">
                         </div>
-                        <select style="padding: 0.5rem; border-radius: 6px; border: 1px solid #555; background: #1a1d21; color: #fff;">
+                        <select data-invtation-list-target="statusSelect" 
+                                style="padding: 0.5rem; border-radius: 6px; border: 1px solid #555; background: #1a1d21; color: #fff;">
                             <option value="">All Status</option>
                             <option value="pending">Pending</option>
                             <option value="accepted">Accepted</option>
                             <option value="expired">Expired</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
-                        <button class="button-6" style="padding: 0.5rem 1rem; font-size: 0.9rem; background: #6c757d;">
+                        <button class="button-6" 
+                                data-action="click->invtation-list#applyFilters"
+                                style="padding: 0.5rem 1rem; font-size: 0.9rem; background: #6c757d;">
                             🔍 Filter
+                        </button>
+                        <button class="button-6" 
+                                data-action="click->invtation-list#clearFilters"
+                                style="padding: 0.5rem 1rem; font-size: 0.9rem; background: #dc3545;">
+                            🗑️ Clear
                         </button>
                     </div>
 
@@ -57,7 +70,12 @@
                         {% if invitations is defined and invitations|length > 0 %}
                             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                                 {% for invitation in invitations %}
-                                    <div style="background: #2c3136; border-radius: 8px; padding: 1.25rem; border-left: 4px solid {% if invitation.status == 'pending' %}#f39c12{% elseif invitation.status == 'accepted' %}#4caf50{% elseif invitation.status == 'expired' %}#e74c3c{% else %}#6c757d{% endif %};">
+                                    <div data-invtation-list-target="invitationItem"
+                                         data-email="{{ invitation.email }}"
+                                         data-username="{{ invitation.username|default('') }}"
+                                         data-status="{{ invitation.status }}"
+                                         style="background: #2c3136; border-radius: 8px; padding: 1.25rem; border-left: 4px solid {% if invitation.status == 'pending' %}#f39c12{% elseif invitation.status == 'accepted' %}#4caf50{% elseif invitation.status == 'expired' %}#e74c3c{% else %}#6c757d{% endif %};">
+                                        
                                         <div style="display: flex; justify-content: space-between; align-items: start;">
                                             <!-- Left: Invitation Details -->
                                             <div style="flex: 1;">
@@ -83,19 +101,27 @@
                                             </div>
 
                                             <!-- Right: Action Buttons -->
-                                            <div style="display: flex; justify-content:space-between;">
+                                            <div style="display: flex; gap: 0.5rem; justify-content: space-around;">
                                                 {% if invitation.status == 'pending' %}
-                                                    <button class="button-6"  onclick="copyInvitationLink('{{ invitation.secretTag }}')" style="margin-right: 0.5rem;">
+                                                    <button class="button-6" 
+                                                            data-action="click->invtation-list#copyLink"
+                                                            data-token="{{ invitation.secretTag }}">
                                                         📋 Copy Link
                                                     </button>
-                                                    <button class="button-6">
+                                                    <button class="button-6"
+                                                            data-action="click->invtation-list#resendInvitation"
+                                                            data-invitation-id="{{ invitation.id }}">
                                                         📤 Resend
                                                     </button>
-                                                    <button class="button-6">
+                                                    <button class="button-6"
+                                                            data-action="click->invtation-list#cancelInvitation"
+                                                            data-invitation-id="{{ invitation.id }}">
                                                         ❌ Cancel
                                                     </button>
                                                 {% elseif invitation.status == 'expired' %}
-                                                    <button class="button-6">
+                                                    <button class="button-6"
+                                                            data-action="click->invtation-list#renewInvitation"
+                                                            data-invitation-id="{{ invitation.id }}">
                                                         🔄 Renew
                                                     </button>
                                                 {% endif %}
@@ -118,56 +144,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- todo refactor into stimulus controller -->
-            <!-- JavaScript for Actions -->
-            <script>
-                function copyInvitationLink(token) {
-                    const link = `${window.location.origin}/register/member/${token}`;
-                    navigator.clipboard.writeText(link).then(() => {
-                        alert('🔗 Invitation link copied to clipboard!');
-                    });
-                }
-
-                function resendInvitation(invitationId) {
-                    if (confirm('📤 Resend this invitation?')) {
-                        // Add AJAX call to resend invitation
-                        fetch(`/member/invitation/${invitationId}/resend`, {
-                            method: 'POST',
-                            headers: {'X-Requested-With': 'XMLHttpRequest'}
-                        }).then(() => {
-                            alert('✅ Invitation resent successfully!');
-                            location.reload();
-                        });
-                    }
-                }
-
-                function cancelInvitation(invitationId) {
-                    if (confirm('❌ Cancel this invitation? This action cannot be undone.')) {
-                        // Add AJAX call to cancel invitation
-                        fetch(`/member/invitation/${invitationId}/cancel`, {
-                            method: 'POST',
-                            headers: {'X-Requested-With': 'XMLHttpRequest'}
-                        }).then(() => {
-                            alert('🚫 Invitation cancelled successfully!');
-                            location.reload();
-                        });
-                    }
-                }
-
-                function renewInvitation(invitationId) {
-                    if (confirm('🔄 Renew this invitation for another 7 days?')) {
-                        // Add AJAX call to renew invitation
-                        fetch(`/member/invitation/${invitationId}/renew`, {
-                            method: 'POST',
-                            headers: {'X-Requested-With': 'XMLHttpRequest'}
-                        }).then(() => {
-                            alert('✨ Invitation renewed successfully!');
-                            location.reload();
-                        });
-                    }
-                }
-            </script>
         {% endblock %}
     {% endembed %}
 {% endblock %}

@@ -4,6 +4,11 @@ namespace App\Managers;
 
 use App\Repository\FriendLinkRepository;
 use App\Repository\UserRepository;
+use App\Entity\FriendLink;
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping as ORM;
+
 
 class FriendManager
 {
@@ -14,15 +19,15 @@ class FriendManager
     ) {
     }
 
-    public function addFriend(User $user, User $friend): array
+    public function addFriend(User $with, User $friend): void
     {
-        if ($this->friendLinkRepository->hasFriend($friend, $with))
+        if (!$this->friendLinkRepository->hasFriend($friend, $with))
         {
             $friendLink = new FriendLink();
-            $friendLink->setUser1($user);
-            $friendLink->setUser2($user);
-            $entityManager->persist($friendLink);
-            $entityManager->flush();
+            $friendLink->setUser1($with);
+            $friendLink->setUser2($friend);
+            $this->entityManager->persist($friendLink);
+            $this->entityManager->flush();
         }
     }
 }

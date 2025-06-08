@@ -15,9 +15,7 @@ final class SettingController extends AbstractController
     public function memberSettings(Request $request, SettingManager $manager): Response
     {
         $form = $this->createForm(SettingsType::class, null, ["user" => $this->getUser()]);
-        
         $form->handleRequest($request);
-
         if($form->isSubmitted() && $form->isValid())
         {
             $manager->updateSettingsFromSettingType($this->getUser(), $form->getData());

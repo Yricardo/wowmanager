@@ -55,16 +55,11 @@
                         </form>
                     </div>
                 </div>
-                
-                <!-- Debug info (remove in production) -->
-                <div style="position: fixed; bottom: 10px; right: 10px; background: rgba(255,255,255,0.1); padding: 5px; font-size: 12px; color: #ccc;">
-                    Current User: {{ app.user.id }} | Chatting with: {{ messagingWith.id }}
-                </div>
             </div>       
         {% endblock %}
 
         {% block right %}
-            {% include 'member/partials/friends_list.html.twig' %}
+            {% include 'member/partials/conversations_list.html.twig' %}
         {% endblock %}
     {% endembed %}
 {% endblock %}

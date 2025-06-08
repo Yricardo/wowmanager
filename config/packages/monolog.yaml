@@ -51,6 +51,12 @@ when@prod:
                 path: php://stderr
                 level: debug
                 formatter: monolog.formatter.json
+            # Add file-based security logging for debugging
+            security_file:
+                type: stream
+                path: "%kernel.logs_dir%/security.log"
+                level: debug
+                channels: ["security"]    
             console:
                 type: console
                 process_psr_3_messages: false

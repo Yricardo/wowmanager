@@ -127,6 +127,7 @@ class Item
             $this->auctions->add($auction);
             $auction->setItem($this);
         }
+
         return $this;
     }
 

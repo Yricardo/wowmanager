@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\FriendLink;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\User;
-use App\Entity\FriendLink;
 
 class FriendsFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -14,8 +14,8 @@ class FriendsFixtures extends Fixture implements DependentFixtureInterface
     {
         // Retrieve all users from the references set in UserFixtures
         $users = [];
-        for ($i = 1; $i <= 20; $i++) {
-			$users[] = $this->getReference('f_user' . $i, User::class);
+        for ($i = 1; $i <= 20; ++$i) {
+            $users[] = $this->getReference('f_user'.$i, User::class);
         }
 
         // Create random friend links between users
@@ -24,8 +24,9 @@ class FriendsFixtures extends Fixture implements DependentFixtureInterface
             $friends = array_rand($users, $friendCount);
             foreach ((array) $friends as $friendIndex) {
                 $user2 = $users[$friendIndex];
-                if ($user1 === $user2)
+                if ($user1 === $user2) {
                     continue;
+                }
                 $friendLink = new FriendLink()
                 ->setUser1($user1)
                 ->setUser2($users[$friendIndex]);

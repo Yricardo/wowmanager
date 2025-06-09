@@ -2,16 +2,16 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Item;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\Item;
 
 class ItemFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
         $items = $this->generateItems();
-        
+
         // Loop through the items and create entities
         foreach ($items as $index => $itemData) {
             $item = new Item();
@@ -23,7 +23,7 @@ class ItemFixtures extends Fixture
             $manager->persist($item);
 
             // Add a reference for use in other fixtures
-            $this->addReference('item_' . $index, $item);
+            $this->addReference('item_'.$index, $item);
         }
 
         // Flush all changes to the database

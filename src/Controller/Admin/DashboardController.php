@@ -2,21 +2,21 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\AvailableRoleForClass;
+use App\Entity\Character;
+use App\Entity\CharacterClass;
+use App\Entity\CharacterRole;
+use App\Entity\FriendLink;
+use App\Entity\Guild;
+use App\Entity\Server;
+use App\Entity\Setting;
+use App\Entity\User;
+use App\Entity\WowVersion;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\User;
-use App\Entity\CharacterClass;
-use App\Entity\CharacterRole;
-use App\Entity\Server;
-use App\Entity\Character;
-use App\Entity\WowVersion;
-use App\Entity\Guild;
-use App\Entity\AvailableRoleForClass;
-use App\Entity\FriendLink;
-use App\Entity\Setting;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'app_admin')]
 class DashboardController extends AbstractDashboardController
@@ -41,8 +41,8 @@ class DashboardController extends AbstractDashboardController
         // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
         // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
         //
-        
-        //return $this->render('admin/admin.html.twig');
+
+        // return $this->render('admin/admin.html.twig');
     }
 
     public function configureDashboard(): Dashboard

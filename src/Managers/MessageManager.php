@@ -2,11 +2,11 @@
 
 namespace App\Managers;
 
-use App\Entity\User;
 use App\Entity\Message;
-use App\Repository\MessageRepository;
-use App\Repository\FriendLinkRepository;
+use App\Entity\User;
 use App\Exception\MessageException;
+use App\Repository\FriendLinkRepository;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class MessageManager
@@ -14,12 +14,13 @@ class MessageManager
     public function __construct(
         private MessageRepository $messageRepository,
         private FriendLinkRepository $friendLinkRepository,
-        private EntityManagerInterface $entityManager
-    ) {}
+        private EntityManagerInterface $entityManager,
+    ) {
+    }
 
     /**
-     * Send a message between users
-     * 
+     * Send a message between users.
+     *
      * @throws MessageException
      */
     public function sendMessage(User $sender, User $receiver, string $content): Message
@@ -42,30 +43,33 @@ class MessageManager
     }
 
     /**
-     * Get conversation between two users
-     * 
+     * Get conversation between two users.
+     *
      * @return Message[]
+     *
      * @throws MessageException
      */
     public function getConversation(User $user1, User $user2): array
     {
         $this->validateFriendship($user1, $user2);
+
         return $this->messageRepository->findConversationBetweenUsers($user1, $user2);
     }
 
     /**
-     * Get new messages since a specific timestamp
-     * 
+     * Get new messages since a specific timestamp.
+     *
      * @return Message[]
+     *
      * @throws MessageException
      */
     public function getNewMessages(User $currentUser, User $otherUser, \DateTime $since): array
     {
         $this->validateFriendship($currentUser, $otherUser);
-        
+
         $newMessages = $this->messageRepository->findNewMessagesBetweenUsers(
-            $currentUser, 
-            $otherUser, 
+            $currentUser,
+            $otherUser,
             $since
         );
 
@@ -76,12 +80,12 @@ class MessageManager
     }
 
     /**
-     * Mark messages as read for a specific user
+     * Mark messages as read for a specific user.
      */
     private function markMessagesAsRead(array $messages, User $reader): void
     {
         $hasChanges = false;
-        
+
         foreach ($messages as $message) {
             if ($message->getReceiver()->getId() === $reader->getId() && !$message->isRead()) {
                 $message->setRead(true);
@@ -95,8 +99,8 @@ class MessageManager
     }
 
     /**
-     * Validate that users are friends
-     * 
+     * Validate that users are friends.
+     *
      * @throws MessageException
      */
     private function validateFriendship(User $user1, User $user2): void
@@ -107,14 +111,14 @@ class MessageManager
     }
 
     /**
-     * Validate message content
-     * 
+     * Validate message content.
+     *
      * @throws MessageException
      */
     private function validateMessageContent(string $content): void
     {
         $trimmed = trim($content);
-        
+
         if (empty($trimmed)) {
             throw new MessageException('Message cannot be empty', MessageException::EMPTY_MESSAGE);
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Managers;
+namespace App\Manager;
 
 use Symfony\Component\Mailer\MailerInterface;
 

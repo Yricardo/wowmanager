@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\EventListener;
 
@@ -6,7 +6,7 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Events;
-use App\Managers\SettingManager;
+use App\Manager\SettingManager;
 use Doctrine\ORM\Mapping\PostPersist;
 
 /**

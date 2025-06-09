@@ -5,13 +5,13 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Invitation;
 use App\Form\RegistrationForm;
-use App\Managers\InvitationManager;
+use App\Manager\InvitationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\InvitationRepository;
-use App\Managers\UserManager;
+use App\Manager\UserManager;
 use Psr\Log\LoggerInterface;
 
 class RegistrationController extends AbstractController
@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         $invitation = $invitationRepository->findOneBy([
-            'secretTag' => $invitationCode, 
+            'secretTag' => $invitationCode,
             'status' => Invitation::STATUS_PENDING,
             'forRole' => User::ROLE_MEMBER
         ]);
@@ -43,9 +43,9 @@ class RegistrationController extends AbstractController
                 $invitationManager->transformInvitationToMember($invitation, $user->getUsername(), $user->getPassword());
                 $this->addFlash('success', 'Registration complete. you can now log in.');//todo handle display in login view
                 return $this->redirectToRoute('app_login');
-            } 
+            }
             catch (\Throwable $e) {
-                throw $e; //todo remove 
+                throw $e; //todo remove
                 $logger->error('Registration failed', [
                     'error' => $e->getMessage(),
                     'invitationCode' => $invitationCode,
@@ -64,9 +64,9 @@ class RegistrationController extends AbstractController
     #[Route('/register/admin/{invitationCode}', name: 'app_register_admin')]
     public function registerAdmin(Request $request, UserManager $userManager, InvitationRepository $invitationRepository ,LoggerInterface $logger, string $invitationCode): Response
     {
-        //todo refactor into a manager 
+        //todo refactor into a manager
         $invitation = $invitationRepository->findOneBy([
-            'secretTag' => $invitationCode, 
+            'secretTag' => $invitationCode,
             'status' => Invitation::STATUS_PENDING,
             'forRole' => User::ROLE_MEMBER
         ]);
@@ -88,7 +88,7 @@ class RegistrationController extends AbstractController
                 $password = $datas['plainPassword'];
                 $userManager->addAdmin($username, $password, $invitationCode);
                 return $this->redirectToRoute('app_login');
-            } 
+            }
             catch (\Throwable $e) {
                 $logger->error('Registration failed', [
                     'error' => $e->getMessage(),

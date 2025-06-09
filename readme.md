@@ -209,7 +209,7 @@ src/
 │   ├── UserSettingsPopulatorListener.php
 │   └── SuperAdminProtectionListener.php
 ├── Form/                 # Symfony forms
-├── Managers/             # Business logic services
+├── Manager/             # Business logic services
 │   ├── UserManager.php
 │   ├── InvitationManager.php
 │   ├── MessageManager.php

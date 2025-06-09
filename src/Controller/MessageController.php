@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Managers\MessageManager;
+use App\Manager\MessageManager;
 use App\Repository\FriendLinkRepository;
 use App\Exception\MessageException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,37 +29,37 @@ final class MessageController extends AbstractController
     {
         try {
             $content = $request->getPayload()->get('message');
-            
+
             $message = $this->messageManager->sendMessage(
-                $this->getUser(), 
-                $receiver, 
+                $this->getUser(),
+                $receiver,
                 $content
             );
-            
+
             return new JsonResponse([
-                'success' => true, 
+                'success' => true,
                 'message' => 'Message sent successfully',
                 'messageId' => $message->getId()
             ]);
-            
+
         } catch (MessageException $e) {
             return new JsonResponse([
                 'error' => $e->getMessage()
             ], $e->getHttpStatusCode());
-            
+
         } catch (\Exception $e) {
             $this->logger->error('Failed to send message', [
                 'error' => $e->getMessage(),
                 'sender' => $this->getUser()->getId(),
                 'receiver' => $receiver->getId()
             ]);
-            
+
             return new JsonResponse([
                 'error' => 'Failed to send message'
             ], 500);
         }
-    }    
-    
+    }
+
     #[Route('/list', name: 'app_member_message_list')]
     public function conversationList(): Response
     {
@@ -69,17 +69,17 @@ final class MessageController extends AbstractController
             return $this->render('member/views/message_list.html.twig', [
                 'friends' => $friends
             ]);
-            
+
         } catch (\Exception $e) {
             $this->logger->error('Failed to load conversations list', [
                 'error' => $e->getMessage(),
                 'user' => $this->getUser()->getId()
             ]);
-            
+
             $this->addFlash('error', 'Failed to load conversations');
             return $this->redirectToRoute('app_member');
-        }        
-    }    
+        }
+    }
 
     #[Route('/{id}', name: 'app_member_message')]
     public function conversation(User $user): Response
@@ -93,18 +93,18 @@ final class MessageController extends AbstractController
                 'friends' => $friends,
                 'messages' => $messages
             ]);
-            
+
         } catch (MessageException $e) {
             $this->addFlash('error', $e->getMessage());
             return $this->redirectToRoute('app_member');
-            
+
         } catch (\Exception $e) {
             $this->logger->error('Failed to load conversation', [
                 'error' => $e->getMessage(),
                 'user1' => $this->getUser()->getId(),
                 'user2' => $user->getId()
             ]);
-            
+
             $this->addFlash('error', 'Failed to load conversation');
             return $this->redirectToRoute('app_member');
         }
@@ -115,10 +115,10 @@ final class MessageController extends AbstractController
     {
         try {
             $timestamp = $this->parseTimestamp($request->query->get('mostRecentMessageDate'));
-            
+
             $newMessages = $this->messageManager->getNewMessages(
-                $this->getUser(), 
-                $chattingWith, 
+                $this->getUser(),
+                $chattingWith,
                 $timestamp
             );
 
@@ -136,7 +136,7 @@ final class MessageController extends AbstractController
                     ],
                     'receiver' => [
                         'id' => $message->getReceiver()->getId()
-                        // Remove username to avoid circular references  
+                        // Remove username to avoid circular references
                     ]
                 ];
             }
@@ -149,14 +149,14 @@ final class MessageController extends AbstractController
             return new JsonResponse([
                 'error' => $e->getMessage()
             ], $e->getHttpStatusCode());
-            
+
         } catch (\Exception $e) {
             $this->logger->error('Failed to fetch new messages', [
                 'error' => $e->getMessage(),
                 'user1' => $this->getUser()->getId(),
                 'user2' => $chattingWith->getId()
             ]);
-            
+
             return new JsonResponse([
                 'error' => 'Failed to fetch messages: '.$e->getMessage()
             ], 500);
@@ -166,14 +166,14 @@ final class MessageController extends AbstractController
     //todo refactor into helper
     /**
      * Parse and validate timestamp parameter
-     * 
+     *
      * @throws MessageException
      */
     private function parseTimestamp(?string $timestampParam): \DateTime
     {
         if (!$timestampParam) {
             throw new MessageException(
-                'Missing mostRecentMessageDate parameter', 
+                'Missing mostRecentMessageDate parameter',
                 MessageException::INVALID_TIMESTAMP
             );
         }
@@ -183,10 +183,10 @@ final class MessageController extends AbstractController
             $date = new \DateTime();
             $date->setTimestamp($timestamp);
             return $date;
-            
+
         } catch (\Exception $e) {
             throw new MessageException(
-                'Invalid timestamp format', 
+                'Invalid timestamp format',
                 MessageException::INVALID_TIMESTAMP
             );
         }

@@ -2,18 +2,16 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher
-    )
-    {
+        private readonly UserPasswordHasherInterface $passwordHasher,
+    ) {
     }
 
     public function load(ObjectManager $manager): void
@@ -29,27 +27,27 @@ class UserFixtures extends Fixture
         $manager->persist($admin);
 
         // Create 20 User Entities with user and contributor role set
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 20; ++$i) {
             $user = new User();
-            $user->setUsername('f_user' . $i);
-            $user->setPassword($this->passwordHasher->hashPassword($user, 'f_user' . $i));
+            $user->setUsername('f_user'.$i);
+            $user->setPassword($this->passwordHasher->hashPassword($user, 'f_user'.$i));
             $user->setRoles(['ROLE_USER', 'ROLE_CONTRIBUTOR']);
             $user->setCreatedAt(new \DateTimeImmutable());
-            $user->setTrustScore(rand(50,100));
+            $user->setTrustScore(rand(50, 100));
             $manager->persist($user);
-            $this->addReference('f_user' . $i, $user);
+            $this->addReference('f_user'.$i, $user);
         }
 
         // Create 20 more entities with user fundator set
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 20; ++$i) {
             $user = new User();
-            $user->setUsername('s_user' . $i);
-            $user->setPassword($this->passwordHasher->hashPassword($user, 's_user' . $i));
+            $user->setUsername('s_user'.$i);
+            $user->setPassword($this->passwordHasher->hashPassword($user, 's_user'.$i));
             $user->setRoles(['ROLE_USER']);
             $user->setCreatedAt(new \DateTimeImmutable());
-            $user->setTrustScore(rand(50,100));
+            $user->setTrustScore(rand(50, 100));
             $manager->persist($user);
-            $this->addReference('s_user' . $i, $user);
+            $this->addReference('s_user'.$i, $user);
         }
 
         $manager->flush();

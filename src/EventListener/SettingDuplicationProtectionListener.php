@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 class SettingDuplicationProtectionListener
 {
     public function __construct(
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -31,7 +31,7 @@ class SettingDuplicationProtectionListener
            ->setParameter('name', $settingName)
            ->setParameter('isGlobal', $isGlobal);
 
-        if (!$isGlobal && $user !== null) {
+        if (!$isGlobal && null !== $user) {
             $qb->andWhere('s.user = :user')
                ->setParameter('user', $user);
         }

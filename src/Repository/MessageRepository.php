@@ -18,8 +18,8 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find complete conversation between two users, sorted by date
-     * 
+     * Find complete conversation between two users, sorted by date.
+     *
      * @return Message[]
      */
     public function findConversationBetweenUsers(User $user1, User $user2): array
@@ -38,8 +38,8 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find new messages between users since a specific date
-     * 
+     * Find new messages between users since a specific date.
+     *
      * @return Message[]
      */
     public function findNewMessagesBetweenUsers(User $user1, User $user2, \DateTime $since): array
@@ -59,7 +59,7 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Count unread messages for a user
+     * Count unread messages for a user.
      */
     public function countUnreadMessagesForUser(User $user): int
     {
@@ -74,14 +74,14 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find users with whom the given user has conversations
-     * 
+     * Find users with whom the given user has conversations.
+     *
      * @return User[]
      */
     public function findConversationPartners(User $user): array
     {
         $qb = $this->createQueryBuilder('m');
-        
+
         return $qb
             ->select('DISTINCT IDENTITY(m.sender) as sender_id, IDENTITY(m.receiver) as receiver_id')
             ->where('m.sender = :user OR m.receiver = :user')

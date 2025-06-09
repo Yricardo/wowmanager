@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Item;
-use App\Entity\OwnedItem;
 
 #[ORM\Entity(repositoryClass: CharacterRepository::class)]
 #[ORM\Table(name: 'game_character')]
@@ -24,7 +22,7 @@ class Character
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $level = null;
-    
+
     #[ORM\ManyToOne(inversedBy: 'characters')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Server $server = null;

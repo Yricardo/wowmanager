@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\CharacterRole;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\CharacterRole;
 
 class CharacterRoleFixtures extends Fixture
 {
@@ -13,15 +13,15 @@ class CharacterRoleFixtures extends Fixture
         $rolesNames = [
             'dps',
             'heal',
-            'tank'
+            'tank',
         ];
 
-        for ($index = 0; $index < count($rolesNames); $index++) {
+        for ($index = 0; $index < count($rolesNames); ++$index) {
             $roleName = $rolesNames[$index];
             $role = new CharacterRole();
             $role->setName($roleName);
-            $role->setImgPath('images/roles/' . $roleName . '.png');
-            $this->addReference('role_' . $roleName, $role);
+            $role->setImgPath('images/roles/'.$roleName.'.png');
+            $this->addReference('role_'.$roleName, $role);
             $manager->persist($role);
         }
 

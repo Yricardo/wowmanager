@@ -2,18 +2,18 @@
 
 namespace App\Command;
 
+use App\Entity\Setting;
+use App\Entity\User;
+use App\Helper\SettingHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Setting;
-use App\Entity\User;
-use App\Helper\SettingHelper;
 
 /**
- * Test setting duplication protection
- * 
+ * Test setting duplication protection.
+ *
  * @todo Refactor into unit test
  */
 #[AsCommand(
@@ -23,7 +23,7 @@ use App\Helper\SettingHelper;
 class TestSettingProtectionCommand extends Command
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
         parent::__construct();
     }
@@ -39,24 +39,26 @@ class TestSettingProtectionCommand extends Command
 
             if (!$superAdmin) {
                 $output->writeln('<error>❌ Super admin user not found. Run powtatow:base:launch first.</error>');
+
                 return Command::FAILURE;
             }
 
             $output->writeln('<info>📋 Testing duplicate user setting creation...</info>');
-            
+
             // Test 1: Try to create duplicate user setting
             $this->testDuplicateUserSetting($superAdmin, $output);
 
             $output->writeln('<info>📋 Testing duplicate global setting creation...</info>');
-            
+
             // Test 2: Try to create duplicate global setting
             $this->testDuplicateGlobalSetting($superAdmin, $output);
 
             $output->writeln('<success>✅ All setting protection tests completed!</success>');
-            return Command::SUCCESS;
 
+            return Command::SUCCESS;
         } catch (\Exception $e) {
-            $output->writeln('<error>❌ Unexpected error: ' . $e->getMessage() . '</error>');
+            $output->writeln('<error>❌ Unexpected error: '.$e->getMessage().'</error>');
+
             return Command::FAILURE;
         }
     }
@@ -79,7 +81,7 @@ class TestSettingProtectionCommand extends Command
         } catch (\RuntimeException $e) {
             if (str_contains($e->getMessage(), 'Setting duplication protection')) {
                 $output->writeln('<success>✅ User setting duplication properly prevented</success>');
-                $output->writeln('<comment>   Protection message: ' . $e->getMessage() . '</comment>');
+                $output->writeln('<comment>   Protection message: '.$e->getMessage().'</comment>');
             } else {
                 throw $e;
             }
@@ -104,7 +106,7 @@ class TestSettingProtectionCommand extends Command
         } catch (\RuntimeException $e) {
             if (str_contains($e->getMessage(), 'Setting duplication protection')) {
                 $output->writeln('<success>✅ Global setting duplication properly prevented</success>');
-                $output->writeln('<comment>   Protection message: ' . $e->getMessage() . '</comment>');
+                $output->writeln('<comment>   Protection message: '.$e->getMessage().'</comment>');
             } else {
                 throw $e;
             }

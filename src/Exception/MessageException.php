@@ -24,10 +24,10 @@ class MessageException extends \Exception
 
     public function getHttpStatusCode(): int
     {
-        return match($this->errorCode) {
+        return match ($this->errorCode) {
             self::NOT_FRIENDS => 403,
             self::EMPTY_MESSAGE, self::MESSAGE_TOO_LONG, self::INVALID_TIMESTAMP => 400,
-            default => 500
+            default => 500,
         };
     }
 }

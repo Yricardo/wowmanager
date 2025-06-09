@@ -2,12 +2,11 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use App\Entity\Server;
-use App\DataFixtures\WowVersionFixtures;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use App\Entity\WowVersion;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class ServerFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -16,11 +15,11 @@ class ServerFixtures extends Fixture implements DependentFixtureInterface
         $versions = [
             WowVersion::WOW_VERSION_CLASSIC => [
                 'Mirage raceway',
-                'Atiesh'
+                'Atiesh',
             ],
             WowVersion::WOW_VERSION_RETAIL => [
-                'Ner’zhul'
-            ]
+                'Ner’zhul',
+            ],
         ];
 
         foreach ($versions as $key => $serverNames) {
@@ -32,8 +31,8 @@ class ServerFixtures extends Fixture implements DependentFixtureInterface
             }
             $this->addReference($key, $server);
         }
-        
-        for ($index = 0; $index < count($serverNames); $index++) {
+
+        for ($index = 0; $index < count($serverNames); ++$index) {
             $server = new Server();
             $serverName = $serverNames[$index];
             $server->setName($serverName);
@@ -48,7 +47,7 @@ class ServerFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
-            WowVersionFixtures::class
+            WowVersionFixtures::class,
         ];
     }
 }

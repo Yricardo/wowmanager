@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
+use App\Managers\AuctionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\AuctionRepository;
-use App\Managers\AuctionManager;
 
 final class AuctionController extends AbstractController
 {
@@ -15,7 +14,8 @@ final class AuctionController extends AbstractController
     {
         $userAuctions = $auctionManager->getAuctionsByUser($this->getUser());
         $userBiddedOn = $auctionManager->getAuctionsByBidderUser($this->getUser());
-        $userOthersVisibleAuctions = [];//todo implement
+        $userOthersVisibleAuctions = []; // todo implement
+
         return $this->render('member/views/auction_list.html.twig', [
             'userAuctions' => $userAuctions,
             'biddedOn' => $userBiddedOn,

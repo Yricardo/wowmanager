@@ -9,10 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: InvitationRepository::class)]
 class Invitation
 {
-
     public const STATUS_PENDING = 'pending';
     public const STATUS_EXPIRED = 'expired';
-
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

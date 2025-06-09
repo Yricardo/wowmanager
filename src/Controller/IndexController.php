@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class IndexController extends AbstractController
 {
-    //require logged in user
+    // require logged in user
     #[Route('/', name: 'app_index')]
     public function index(): Response
     {

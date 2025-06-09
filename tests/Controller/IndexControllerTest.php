@@ -6,9 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class IndexControllerTest extends WebTestCase
 {
+    // we can optimize this test by using a data provider
 
-    //we can optimize this test by using a data provider
-    
     // data provider providing different user roles and expected redirects
     public function userRolesProvider(): array
     {
@@ -25,7 +24,7 @@ final class IndexControllerTest extends WebTestCase
     public function testIndexWithLoggedUser(string $userRole, ?string $expectedRedirect): void
     {
         $client = static::createClient();
-        
+
         // Create a user with the specified role
         $user = $this->createUser([$userRole]);
 
@@ -42,9 +41,8 @@ final class IndexControllerTest extends WebTestCase
         if ($userRole) {
             $this->assertResponseRedirects($expectedRedirect);
         } else {
-            $this->assertResponseStatusCodeSame(403);// not sure about this
+            $this->assertResponseStatusCodeSame(403); // not sure about this
         }
-
     }
 
     // user factory method, take roles as argument
@@ -57,5 +55,4 @@ final class IndexControllerTest extends WebTestCase
 
         return $user;
     }
-
 }

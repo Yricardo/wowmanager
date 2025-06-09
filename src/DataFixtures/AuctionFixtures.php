@@ -2,13 +2,13 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Auction;
+use App\Entity\Character;
+use App\Entity\Item;
+use App\Entity\Price;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\Auction;
-use App\Entity\Price;
-use App\Entity\Character;
-use App\Entity\Item;
 
 class AuctionFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -16,17 +16,17 @@ class AuctionFixtures extends Fixture implements DependentFixtureInterface
     {
         // Retrieve references for characters and items
         $characters = [];
-        for ($i = 1; $i <= 20; $i++) {
-            $characters[] = $this->getReference('fcharacter_' . $i . '_1', Character::class);
+        for ($i = 1; $i <= 20; ++$i) {
+            $characters[] = $this->getReference('fcharacter_'.$i.'_1', Character::class);
         }
 
         $items = [];
-        for ($i = 0; $i < 50; $i++) {
-            $items[] = $this->getReference('item_' . $i, Item::class);
+        for ($i = 0; $i < 50; ++$i) {
+            $items[] = $this->getReference('item_'.$i, Item::class);
         }
 
         // Create auctions
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 100; ++$i) {
             $auction = new Auction();
 
             // Assign a random seller (character)

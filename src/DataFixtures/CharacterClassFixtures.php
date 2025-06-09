@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\CharacterClass;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\CharacterClass;
 
 class CharacterClassFixtures extends Fixture
 {
@@ -19,14 +19,14 @@ class CharacterClassFixtures extends Fixture
             'death knight',
             'shaman',
             'mage',
-            'warlock'
+            'warlock',
         ];
 
-        for ($index = 0; $index < count($classesNames); $index++) {
+        for ($index = 0; $index < count($classesNames); ++$index) {
             $className = $classesNames[$index];
             $class = new CharacterClass();
             $class->setName($className);
-            $this->addReference('class_' . $className, $class);
+            $this->addReference('class_'.$className, $class);
             $manager->persist($class);
         }
 

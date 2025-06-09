@@ -6,16 +6,14 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailerManager
 {
-
     public function __construct(
-        private MailerInterface $Mailer
+        private MailerInterface $Mailer,
     ) {
     }
 
     public function sendSystemEmail(string $to, string $subject, string $text = '', string $html = ''): bool
     {
-        if(!$text && !$html)
-        {
+        if (!$text && !$html) {
             throw new Exception('No empty email can be sent by system.');
         }
         $email = (new Email())

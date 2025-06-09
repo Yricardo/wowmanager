@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Command;
 
@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use App\Entity\User;
 use App\Helper\SettingHelper;
 use App\Repository\UserRepository;
-use App\Managers\SettingManager;
+use App\Manager\SettingManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -49,8 +49,8 @@ class UpdateSettingsForUsers extends Command
 
     /**
      * IMPORTANT When introducing a new user setting, make sure you have added const and properf mapping for it in SettingHelper
-     * this method, to be called in a command when updating wowmanager, will create setting entries for all existing users 
-     * 
+     * this method, to be called in a command when updating wowmanager, will create setting entries for all existing users
+     *
      * @param User $supposedSuperAdmin The super admin user
      * @param string $name Setting name
      * @param string $type Setting type
@@ -68,7 +68,7 @@ class UpdateSettingsForUsers extends Command
             throw new \Exception('<error>Missing mapping for ' . $name . '</error>');
         }
         $users = $this->userRepository->findAll();
-        foreach ($users as $user) 
+        foreach ($users as $user)
         {
             try{
                 if ($this->settingManager->getSettingValueForUser($name, $user) === null) {

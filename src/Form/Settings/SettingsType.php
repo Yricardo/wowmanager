@@ -15,9 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use App\Helper\SettingHelper;
 use App\Entity\Setting;
 use App\Entity\User;
-use App\Managers\SettingManager; 
+use App\Manager\SettingManager;
 
-class SettingsType  extends AbstractType 
+class SettingsType  extends AbstractType
 {
     public function __construct(
         private readonly SettingManager $manager
@@ -34,30 +34,30 @@ class SettingsType  extends AbstractType
                 case SettingHelper::SETTING_TYPE_STRING :
                     $builder->add(
                         $setting->getName(),
-                        TextType::class, 
+                        TextType::class,
                         ['data' => SettingHelper::formatValue($setting)]
                     );
                     break;
                 case SettingHelper::SETTING_TYPE_INT :
                     $builder->add(
-                        $setting->getName(),IntegerType::class, 
+                        $setting->getName(),IntegerType::class,
                         ['data' => SettingHelper::formatValue($setting)]
                     );
                     break;
                 case SettingHelper::SETTING_TYPE_FLOAT :
                     $builder->add(
                         $setting->getName(),
-                        TextType::class, 
+                        TextType::class,
                         ['data' => SettingHelper::formatValue($setting)]
                     );
                     break;
                 case SettingHelper::SETTING_TYPE_BOOL :
                     $builder->add(
                         $setting->getName(),
-                        CheckboxType::class, 
+                        CheckboxType::class,
                         ['required' => false,'data' => SettingHelper::formatValue($setting)]
-                    );                    
-                    break;            
+                    );
+                    break;
                 default:
                     break;
             }

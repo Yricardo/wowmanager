@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\AuctionRepository;
-use App\Managers\AuctionManager;
+use App\Manager\AuctionManager;
 
 final class AuctionController extends AbstractController
 {

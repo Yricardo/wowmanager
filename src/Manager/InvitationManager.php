@@ -1,14 +1,14 @@
-<?php 
+<?php
 
-namespace App\Managers;
+namespace App\Manager;
 use App\Repository\InvitationRepository;
 use App\Entity\Invitation;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Psr\Log\LoggerInterface;
-use App\Managers\UserManager;
-use App\Managers\FriendManager;
+use App\Manager\UserManager;
+use App\Manager\FriendManager;
 
 use Exception;
 
@@ -22,7 +22,7 @@ class InvitationManager
         private LoggerInterface $logger
     ) {}
 
-    //todo use in invitation controller and adapt 
+    //todo use in invitation controller and adapt
     /**
      * Create a new invitation
      */
@@ -66,15 +66,15 @@ class InvitationManager
 
     public function transformInvitationToMember(Invitation $invitation, string $username, string $password): User
     {
-        if ($invitation->getStatus() !== Invitation::STATUS_PENDING) 
+        if ($invitation->getStatus() !== Invitation::STATUS_PENDING)
         {
             throw new AccessDeniedException('Invitation is not valid for registration.');
         }
 
-        if($invitation->getForRole() === User::ROLE_ADMIN) 
+        if($invitation->getForRole() === User::ROLE_ADMIN)
         {
             throw new Exception('You cannot create a member from an admin invitation.');
-        } 
+        }
 
         // Create a new user from the invitation
         $member = $this->userManager->addMember(

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Managers;
+namespace App\Manager;
 
 use App\Entity\User;
 use App\Entity\Message;
@@ -19,7 +19,7 @@ class MessageManager
 
     /**
      * Send a message between users
-     * 
+     *
      * @throws MessageException
      */
     public function sendMessage(User $sender, User $receiver, string $content): Message
@@ -43,7 +43,7 @@ class MessageManager
 
     /**
      * Get conversation between two users
-     * 
+     *
      * @return Message[]
      * @throws MessageException
      */
@@ -55,17 +55,17 @@ class MessageManager
 
     /**
      * Get new messages since a specific timestamp
-     * 
+     *
      * @return Message[]
      * @throws MessageException
      */
     public function getNewMessages(User $currentUser, User $otherUser, \DateTime $since): array
     {
         $this->validateFriendship($currentUser, $otherUser);
-        
+
         $newMessages = $this->messageRepository->findNewMessagesBetweenUsers(
-            $currentUser, 
-            $otherUser, 
+            $currentUser,
+            $otherUser,
             $since
         );
 
@@ -81,7 +81,7 @@ class MessageManager
     private function markMessagesAsRead(array $messages, User $reader): void
     {
         $hasChanges = false;
-        
+
         foreach ($messages as $message) {
             if ($message->getReceiver()->getId() === $reader->getId() && !$message->isRead()) {
                 $message->setRead(true);
@@ -96,7 +96,7 @@ class MessageManager
 
     /**
      * Validate that users are friends
-     * 
+     *
      * @throws MessageException
      */
     private function validateFriendship(User $user1, User $user2): void
@@ -108,13 +108,13 @@ class MessageManager
 
     /**
      * Validate message content
-     * 
+     *
      * @throws MessageException
      */
     private function validateMessageContent(string $content): void
     {
         $trimmed = trim($content);
-        
+
         if (empty($trimmed)) {
             throw new MessageException('Message cannot be empty', MessageException::EMPTY_MESSAGE);
         }

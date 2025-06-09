@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Invitation;
-use App\Managers\InvitationManager;
+use App\Manager\InvitationManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,8 +26,8 @@ class InvitationController extends AbstractController
         return $this->render('member/views/invitation_list.html.twig', [
             'invitations' =>  $invitations,
             'totalInvitations' => count($invitations),
-            'totalPending' => count($pendingInvitations),     
-            'totalExpired' => count($expiredInvitations)  
+            'totalPending' => count($pendingInvitations),
+            'totalExpired' => count($expiredInvitations)
         ]);
     }
 
@@ -71,5 +71,5 @@ class InvitationController extends AbstractController
         }
 
         return $this->render('member/views/invitation_create.html.twig', []);
-       }    
+       }
 }
